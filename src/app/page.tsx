@@ -1,65 +1,683 @@
-import Image from "next/image";
+// Built by ATLAS — 2026-07-04
+import Link from 'next/link'
+import { Phone, MapPin, Clock, ChevronRight, Star } from 'lucide-react'
+import type { Metadata } from 'next'
+import { SiteNav } from '@/components/SiteNav'
+import { SiteFooter } from '@/components/SiteFooter'
+import { UnitCard } from '@/components/inventory/UnitCard'
+import { DEALER_INFO } from '@/lib/types'
 
-export default function Home() {
+export const metadata: Metadata = {
+  title: 'Southern Idaho RV & Marine | Jerome & Twin Falls, ID',
+  description:
+    "Southern Idaho's only factory-direct Mercury dealer. Shop new and used RVs, boats, and Mercury outboard motors in Jerome, Idaho. 4.6★ from 1,200+ reviews. Serving Twin Falls, Burley, and all of Magic Valley.",
+  alternates: { canonical: `https://${DEALER_INFO.domain}` },
+}
+
+const CATEGORIES = [
+  {
+    label: 'RVs',
+    sub: 'Travel Trailers · Fifth Wheels · Motorhomes',
+    count: '220+ units',
+    href: '/rvs',
+    photo: 'https://picsum.photos/id/28/900/600',
+    size: 'large',
+  },
+  {
+    label: 'Boats',
+    sub: 'Pontoon · Bass · Fishing',
+    count: '80+ units',
+    href: '/boats',
+    photo: 'https://picsum.photos/id/67/600/400',
+    size: 'small',
+  },
+  {
+    label: 'Mercury Outboards',
+    sub: 'Factory-direct · Sales · Service',
+    count: 'In-stock motors',
+    href: '/motors/mercury-outboards',
+    photo: '',
+    size: 'small',
+  },
+]
+
+const FEATURED = [
+  {
+    year: 2025, make: 'Grand Design', model: 'Reflection 311BHS',
+    type: 'Fifth Wheel', condition: 'New' as const,
+    price: 74995, photo: 'https://picsum.photos/id/244/600/420', slug: '2025-grand-design-reflection-311bhs-rv001',
+  },
+  {
+    year: 2024, make: 'Keystone', model: 'Montana 3855BR',
+    type: 'Fifth Wheel', condition: 'Used' as const,
+    price: 58500, photo: 'https://picsum.photos/id/338/600/420', slug: '2024-keystone-montana-3855br-rv002',
+  },
+  {
+    year: 2025, make: 'Bennington', model: '22 SLXP Pontoon',
+    type: 'Pontoon Boat', condition: 'New' as const,
+    price: 42900, photo: 'https://picsum.photos/id/67/600/420', slug: '2025-bennington-22slxp-boat001',
+  },
+  {
+    year: 2024, make: 'Tracker', model: 'Pro 175 TXW',
+    type: 'Bass Boat', condition: 'Used' as const,
+    price: 18750, photo: 'https://picsum.photos/id/167/600/420', slug: '2024-tracker-pro-175txw-boat002',
+  },
+]
+
+const TRUST_ITEMS = [
+  { icon: '★', label: '4.6 Stars', sub: '1,247 Google reviews' },
+  { icon: '⚑', label: 'Veteran-Owned', sub: 'US Military family business' },
+  { icon: '⚓', label: 'Mercury-Exclusive', sub: "Magic Valley's only factory-direct" },
+  { icon: '◈', label: 'Third Generation', sub: 'Family-owned since 1993' },
+]
+
+function StarRow({ score, count }: { score: number; count: number }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      {[1, 2, 3, 4, 5].map(i => (
+        <Star key={i} size={16} fill={i <= score ? 'var(--color-amber)' : 'none'}
+          color="var(--color-amber)" />
+      ))}
+      <span style={{ fontSize: '0.875rem', color: 'var(--color-ink-light)', marginLeft: 4 }}>
+        {score.toFixed(1)} ({count.toLocaleString()} reviews)
+      </span>
+    </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <>
+      <SiteNav />
+
+      <main>
+        {/* ── Hero: asymmetric split ── */}
+        <section style={{ background: 'var(--color-parchment)', overflow: 'hidden' }}>
+          <div
+            style={{
+              maxWidth: 1400,
+              margin: '0 auto',
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              minHeight: '85vh',
+            }}
+            className="hero-grid"
+          >
+            {/* Left: content */}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                padding: '5rem 3rem 5rem 2.5rem',
+                borderLeft: '4px solid var(--color-amber)',
+              }}
+              className="hero-content"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div style={{
+                fontSize: '0.75rem',
+                fontWeight: 600,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--color-amber)',
+                marginBottom: '1.25rem',
+              }}>
+                Jerome, Idaho · Magic Valley's Dealer
+              </div>
+
+              <h1 style={{
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(2.25rem, 4vw, 3.5rem)',
+                fontWeight: 700,
+                lineHeight: 1.1,
+                color: 'var(--color-navy)',
+                letterSpacing: '-0.02em',
+                marginBottom: '1.25rem',
+                maxWidth: '16ch',
+              }}>
+                Southern Idaho's&nbsp;Premier
+                <span style={{ display: 'block', color: 'var(--color-amber)' }}>
+                  RV &amp; Marine Dealer
+                </span>
+              </h1>
+
+              <p style={{
+                fontSize: '1.0625rem',
+                color: 'var(--color-ink-light)',
+                lineHeight: 1.65,
+                maxWidth: '44ch',
+                marginBottom: '1.75rem',
+              }}>
+                New and used RVs, boats, and Mercury outboard motors — serviced by ASE-certified technicians.
+                Financing available on-site. Jerome, Idaho.
+              </p>
+
+              <div style={{ marginBottom: '2rem' }}>
+                <StarRow score={DEALER_INFO.reviewScore} count={DEALER_INFO.reviewCount} />
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.875rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+                <Link href="/rvs" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6,
+                  padding: '0.75rem 1.5rem',
+                  background: 'var(--color-amber)',
+                  color: 'white',
+                  fontWeight: 700,
+                  fontSize: '0.9375rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  letterSpacing: '-0.01em',
+                  boxShadow: 'var(--shadow-amber)',
+                }}>
+                  Browse Inventory <ChevronRight size={16} />
+                </Link>
+                <a href={DEALER_INFO.phoneHref} style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  padding: '0.75rem 1.5rem',
+                  background: 'transparent',
+                  color: 'var(--color-navy)',
+                  fontWeight: 600,
+                  fontSize: '0.9375rem',
+                  borderRadius: '8px',
+                  textDecoration: 'none',
+                  border: '1.5px solid var(--color-navy)',
+                }}>
+                  <Phone size={15} strokeWidth={2.5} />
+                  {DEALER_INFO.phone}
+                </a>
+              </div>
+
+              {/* Inline trust badges */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem' }}>
+                {['🇺🇸 Veteran-Owned', '⚓ Mercury-Exclusive', '3rd-Generation Family'].map(badge => (
+                  <span key={badge} style={{
+                    fontSize: '0.8125rem',
+                    fontWeight: 500,
+                    color: 'var(--color-navy)',
+                    background: 'white',
+                    padding: '0.3125rem 0.75rem',
+                    borderRadius: '20px',
+                    border: '1px solid var(--color-parchment-dark)',
+                  }}>
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Right: photo */}
+            <div style={{ position: 'relative', minHeight: 400, overflow: 'hidden' }} className="hero-photo">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://picsum.photos/id/28/1200/900"
+                alt="Southern Idaho lake and mountains — RV and boat country"
+                style={{
+                  position: 'absolute', inset: 0,
+                  width: '100%', height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center',
+                }}
+              />
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to right, var(--color-parchment) 0%, transparent 20%)',
+              }} />
+            </div>
+          </div>
+
+          <style>{`
+            .hero-grid { grid-template-columns: 1fr !important; }
+            .hero-content { padding: 3rem 1.5rem !important; border-left: 4px solid var(--color-amber); }
+            .hero-photo { min-height: 320px !important; }
+            @media (min-width: 900px) {
+              .hero-grid { grid-template-columns: 55fr 45fr !important; min-height: 85vh !important; }
+              .hero-content { padding: 5rem 3rem 5rem 2.5rem !important; }
+              .hero-photo { min-height: unset !important; }
+            }
+          `}</style>
+        </section>
+
+        {/* ── Trust band ── */}
+        <div style={{ background: 'var(--color-navy)', padding: '1.5rem' }}>
+          <div style={{
+            maxWidth: 1400, margin: '0 auto',
+            display: 'flex', flexWrap: 'wrap', gap: '1rem',
+            justifyContent: 'center', alignItems: 'center',
+          }}>
+            {TRUST_ITEMS.map((item, i) => (
+              <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                {i > 0 && (
+                  <div
+                    style={{ width: 1, height: 32, background: 'rgba(255,255,255,0.12)' }}
+                    aria-hidden
+                    className="trust-divider"
+                  />
+                )}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <span style={{
+                    fontFamily: 'var(--font-display)',
+                    color: 'white', fontWeight: 600, fontSize: '0.9375rem',
+                  }}>
+                    {item.icon} {item.label}
+                  </span>
+                  <span style={{ color: 'oklch(70% 0.015 220)', fontSize: '0.75rem' }}>{item.sub}</span>
+                </div>
+              </div>
+            ))}
+            <style>{`
+              .trust-divider { display: none !important; }
+              @media (min-width: 600px) { .trust-divider { display: block !important; } }
+            `}</style>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* ── Category Bento ── */}
+        <section style={{ background: 'var(--color-parchment)', padding: '5rem 1.5rem' }}>
+          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+            <div style={{ marginBottom: '2.5rem' }}>
+              <div style={{
+                fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: 8,
+              }}>
+                What We Carry
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontWeight: 700,
+                fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                color: 'var(--color-navy)', letterSpacing: '-0.02em', lineHeight: 1.15,
+              }}>
+                Shop by Category
+              </h2>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr',
+                gap: '1rem',
+              }}
+              className="bento-grid"
+            >
+              {CATEGORIES.map((cat, i) => (
+                <Link
+                  key={cat.label}
+                  href={cat.href}
+                  style={{
+                    display: 'block',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    borderRadius: '12px',
+                    textDecoration: 'none',
+                    gridRow: i === 0 ? 'span 2' : undefined,
+                    minHeight: i === 0 ? 420 : 200,
+                    background: 'var(--color-navy)',
+                  }}
+                  className={i === 0 ? 'bento-large' : 'bento-small'}
+                >
+                  {cat.photo && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={cat.photo}
+                      alt={cat.label}
+                      style={{
+                        position: 'absolute', inset: 0,
+                        width: '100%', height: '100%',
+                        objectFit: 'cover',
+                        transition: 'transform 400ms ease',
+                      }}
+                    />
+                  )}
+                  <div style={{
+                    position: 'absolute', inset: 0,
+                    background: 'linear-gradient(to top, rgba(28,43,56,0.90) 0%, rgba(28,43,56,0.30) 60%, transparent 100%)',
+                  }} />
+                  <div style={{
+                    position: 'absolute', bottom: 0, left: 0, right: 0,
+                    padding: i === 0 ? '2rem' : '1.25rem',
+                  }}>
+                    <div style={{
+                      fontSize: '0.75rem', color: 'var(--color-amber)',
+                      fontWeight: 600, letterSpacing: '0.08em',
+                      textTransform: 'uppercase', marginBottom: 4,
+                    }}>
+                      {cat.count}
+                    </div>
+                    <h3 style={{
+                      fontFamily: 'var(--font-display)',
+                      color: 'white', fontWeight: 700,
+                      fontSize: i === 0 ? '1.75rem' : '1.25rem',
+                      lineHeight: 1.2, marginBottom: 4,
+                    }}>
+                      {cat.label}
+                    </h3>
+                    <div style={{ color: 'rgba(255,255,255,0.70)', fontSize: '0.875rem', marginBottom: 12 }}>
+                      {cat.sub}
+                    </div>
+                    <div style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 4,
+                      fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-amber)',
+                    }}>
+                      Shop Now <ChevronRight size={14} />
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <style>{`
+              .bento-grid { grid-template-columns: 1fr !important; }
+              @media (min-width: 768px) {
+                .bento-grid {
+                  grid-template-columns: 55fr 45fr !important;
+                  grid-template-rows: 260px 260px !important;
+                }
+                .bento-large { min-height: unset !important; }
+                .bento-small { min-height: unset !important; }
+              }
+            `}</style>
+          </div>
+        </section>
+
+        {/* ── Featured Inventory ── */}
+        <section style={{ background: 'white', padding: '5rem 1.5rem' }}>
+          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+            <div style={{
+              display: 'flex', alignItems: 'flex-end',
+              justifyContent: 'space-between', marginBottom: '2.5rem',
+              flexWrap: 'wrap', gap: 12,
+            }}>
+              <div>
+                <div style={{
+                  fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em',
+                  textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: 8,
+                }}>
+                  Just In
+                </div>
+                <h2 style={{
+                  fontFamily: 'var(--font-display)', fontWeight: 700,
+                  fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                  color: 'var(--color-navy)', letterSpacing: '-0.02em',
+                }}>
+                  Featured Inventory
+                </h2>
+              </div>
+              <Link href="/rvs" style={{
+                fontSize: '0.875rem', fontWeight: 600,
+                color: 'var(--color-amber)', textDecoration: 'none',
+                display: 'flex', alignItems: 'center', gap: 4,
+              }}>
+                View All Inventory <ChevronRight size={14} />
+              </Link>
+            </div>
+
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: '1.25rem',
+            }}>
+              {FEATURED.map(unit => (
+                <UnitCard key={unit.slug} {...unit} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── Mercury Exclusive ── */}
+        <section style={{
+          background: 'var(--color-pine)',
+          padding: '5rem 1.5rem',
+          position: 'relative',
+          overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', inset: 0, opacity: 0.04,
+            backgroundImage: 'repeating-linear-gradient(45deg, white 0px, white 1px, transparent 1px, transparent 8px)',
+          }} aria-hidden />
+
+          <div
+            style={{ maxWidth: 1400, margin: '0 auto', position: 'relative', display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }}
+            className="mercury-grid"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <div>
+              <div style={{
+                fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: 12,
+              }}>
+                Factory-Direct Partnership
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontWeight: 700,
+                fontSize: 'clamp(1.75rem, 3vw, 2.75rem)',
+                color: 'white', letterSpacing: '-0.02em', lineHeight: 1.15,
+                marginBottom: '1.25rem',
+              }}>
+                Magic Valley's Only<br />
+                <span style={{ color: 'var(--color-amber)' }}>Factory-Direct</span> Mercury Dealer
+              </h2>
+              <p style={{
+                color: 'oklch(80% 0.020 155)', lineHeight: 1.7,
+                fontSize: '1.0625rem', maxWidth: '50ch', marginBottom: '2rem',
+              }}>
+                As the region's only authorized factory-direct Mercury Marine dealer, we carry the full lineup of outboard motors — and our certified technicians provide warranty service, parts, and the kind of expertise that comes only from being in the business for thirty years.
+              </p>
+
+              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 2.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {[
+                  'Full lineup: 2.5hp to 600hp V12 Verado',
+                  'Factory-warranty service on every motor',
+                  'In-stock parts for same-week repairs',
+                  'Rigging, installation, and winterization',
+                ].map(item => (
+                  <li key={item} style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    color: 'oklch(85% 0.018 155)', fontSize: '0.9375rem',
+                  }}>
+                    <span style={{ color: 'var(--color-amber)', fontWeight: 700, fontSize: '1rem', flexShrink: 0 }}>✓</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              <Link href="/motors/mercury-outboards" style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                padding: '0.75rem 1.75rem',
+                background: 'var(--color-amber)',
+                color: 'white', fontWeight: 700,
+                fontSize: '0.9375rem', borderRadius: '8px',
+                textDecoration: 'none',
+                boxShadow: 'var(--shadow-amber)',
+              }}>
+                Shop Mercury Outboards <ChevronRight size={16} />
+              </Link>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1.5rem' }}>
+              {[
+                { num: '30+', label: 'Years as Mercury dealer' },
+                { num: '#1', label: 'Mercury seller in Magic Valley' },
+                { num: '48h', label: 'Average service turnaround' },
+              ].map(stat => (
+                <div key={stat.num} style={{
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(255,255,255,0.10)',
+                  borderRadius: '10px',
+                  padding: '1.5rem',
+                }}>
+                  <div style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '2.5rem', fontWeight: 700,
+                    color: 'var(--color-amber)', lineHeight: 1, marginBottom: 4,
+                  }}>
+                    {stat.num}
+                  </div>
+                  <div style={{ color: 'oklch(75% 0.018 155)', fontSize: '0.875rem' }}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <style>{`
+            .mercury-grid { grid-template-columns: 1fr !important; }
+            @media (min-width: 900px) {
+              .mercury-grid { grid-template-columns: 60fr 40fr !important; }
+            }
+          `}</style>
+        </section>
+
+        {/* ── Directions ── */}
+        <section style={{ background: 'var(--color-parchment)', padding: '5rem 1.5rem' }}>
+          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+            <div style={{ marginBottom: '2.5rem' }}>
+              <div style={{
+                fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em',
+                textTransform: 'uppercase', color: 'var(--color-amber)', marginBottom: 8,
+              }}>
+                Visit Us
+              </div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontWeight: 700,
+                fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+                color: 'var(--color-navy)', letterSpacing: '-0.02em',
+              }}>
+                Come See Us in Jerome
+              </h2>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }} className="contact-grid">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <MapPin size={20} color="var(--color-amber)" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: 'var(--color-navy)', marginBottom: 2 }}>Address</div>
+                    <div style={{ color: 'var(--color-ink-light)' }}>{DEALER_INFO.address}<br />Jerome, ID 83338</div>
+                    <a
+                      href={DEALER_INFO.directionsUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                        marginTop: 8, color: 'var(--color-amber)',
+                        textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem',
+                      }}
+                    >
+                      Get Directions <ChevronRight size={13} />
+                    </a>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <Phone size={20} color="var(--color-amber)" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: 'var(--color-navy)', marginBottom: 2 }}>Phone</div>
+                    <a href={DEALER_INFO.phoneHref} style={{
+                      color: 'var(--color-amber)', textDecoration: 'none',
+                      fontWeight: 600, fontSize: '1.125rem',
+                    }}>
+                      {DEALER_INFO.phone}
+                    </a>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <Clock size={20} color="var(--color-amber)" style={{ flexShrink: 0, marginTop: 2 }} />
+                  <div>
+                    <div style={{ fontWeight: 700, color: 'var(--color-navy)', marginBottom: 8 }}>Hours</div>
+                    {[
+                      ['Monday – Friday', '9:00 AM – 6:00 PM'],
+                      ['Saturday', '9:00 AM – 5:00 PM'],
+                      ['Sunday', 'Closed'],
+                    ].map(([day, hours]) => (
+                      <div key={day} style={{ display: 'flex', gap: 16, fontSize: '0.9375rem', marginBottom: 4 }}>
+                        <span style={{ color: 'var(--color-navy)', fontWeight: 600, minWidth: 160 }}>{day}</span>
+                        <span style={{ color: 'var(--color-ink-light)' }}>{hours}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div style={{
+                borderRadius: '12px',
+                overflow: 'hidden',
+                minHeight: 300,
+                background: 'var(--color-parchment-dark)',
+                border: '1px solid var(--color-parchment-dark)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                position: 'relative',
+              }}>
+                <a
+                  href={DEALER_INFO.directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    position: 'absolute', inset: 0,
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', justifyContent: 'center',
+                    textDecoration: 'none', gap: 8,
+                  }}
+                >
+                  <MapPin size={32} color="var(--color-amber)" />
+                  <span style={{ fontWeight: 600, color: 'var(--color-navy)', fontSize: '0.9375rem' }}>
+                    {DEALER_INFO.address}
+                  </span>
+                  <span style={{
+                    color: 'var(--color-amber)', fontWeight: 600,
+                    fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: 4,
+                  }}>
+                    Open in Google Maps <ChevronRight size={13} />
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            <style>{`
+              .contact-grid { grid-template-columns: 1fr !important; }
+              @media (min-width: 768px) {
+                .contact-grid { grid-template-columns: 1fr 1fr !important; }
+              }
+            `}</style>
+          </div>
+        </section>
+
+        {/* ── Final CTA strip ── */}
+        <div style={{ background: 'var(--color-navy)', padding: '3rem 1.5rem', textAlign: 'center' }}>
+          <h2 style={{
+            fontFamily: 'var(--font-display)',
+            color: 'white', fontWeight: 700,
+            fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+            marginBottom: '0.75rem',
+          }}>
+            Ready to find your next adventure?
+          </h2>
+          <p style={{ color: 'oklch(72% 0.015 220)', marginBottom: '1.75rem', fontSize: '1.0625rem' }}>
+            Browse 300+ RVs, boats, and motors — or call us to talk with a specialist.
+          </p>
+          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/rvs" style={{
+              padding: '0.75rem 2rem', background: 'var(--color-amber)',
+              color: 'white', fontWeight: 700, borderRadius: '8px',
+              textDecoration: 'none', fontSize: '0.9375rem',
+              boxShadow: 'var(--shadow-amber)',
+            }}>
+              Browse RVs
+            </Link>
+            <Link href="/boats" style={{
+              padding: '0.75rem 2rem',
+              background: 'transparent',
+              color: 'white', fontWeight: 600,
+              borderRadius: '8px', textDecoration: 'none',
+              fontSize: '0.9375rem',
+              border: '1.5px solid rgba(255,255,255,0.35)',
+            }}>
+              Browse Boats
+            </Link>
+          </div>
         </div>
       </main>
-    </div>
-  );
+
+      <SiteFooter />
+    </>
+  )
 }
