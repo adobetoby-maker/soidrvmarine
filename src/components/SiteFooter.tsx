@@ -24,7 +24,7 @@ export function SiteFooter() {
             <span>from {DEALER_INFO.reviewCount.toLocaleString()}+ reviews</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }} aria-hidden />
-          <span style={{ fontSize: '0.875rem' }}>🇺🇸 Veteran-Owned &amp; Operated</span>
+          <span style={{ fontSize: '0.875rem' }}>Veteran-Owned &amp; Operated</span>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }} aria-hidden />
           <span style={{ fontSize: '0.875rem' }}>Magic Valley's Only Factory-Direct Mercury Dealer</span>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }} aria-hidden />
