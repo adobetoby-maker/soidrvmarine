@@ -52,8 +52,8 @@ export default function AboutPage() {
         <div style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', textAlign: 'center' }}>
           {[
             { value: '32+',   label: 'Years in Business' },
-            { value: '1,247', label: 'Google Reviews' },
-            { value: '4.6★',  label: 'Average Rating' },
+            { value: '1,203', label: 'Google Reviews' },
+            { value: '4.7★',  label: 'Average Rating' },
             { value: '3',     label: 'Generations of Family' },
           ].map(s => (
             <div key={s.label}>
@@ -78,7 +78,7 @@ export default function AboutPage() {
             Eight years in, Mercury Marine came calling. They needed a factory-direct dealer for Magic Valley — a dealer willing to hold real inventory and invest in certified technicians. We were the only call they needed to make.
           </p>
           <p style={{ fontSize: '0.9375rem', color: 'var(--color-sage)', lineHeight: 1.7 }}>
-            Today, the third generation has grown up behind the counter and in the service bay. They learned from their grandfather that a reputation is built one customer at a time — and 1,247 Google reviews say it stuck.
+            Today, the third generation has grown up behind the counter and in the service bay. They learned from their grandfather that a reputation is built one customer at a time — and 1,203 Google reviews say it stuck.
           </p>
         </div>
 

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     default: `${DEALER_INFO.name} | Jerome & Twin Falls, ID`,
     template: `%s | ${DEALER_INFO.shortName} — Jerome, ID`,
   },
-  description: `${DEALER_INFO.shortName} in Jerome, Idaho — Southern Idaho's only factory-direct Mercury dealer. Shop RVs, boats, and Mercury outboard motors. 4.6★ from 1,200+ reviews. Serving Twin Falls, Burley, Boise.`,
+  description: `${DEALER_INFO.shortName} in Jerome, Idaho — Southern Idaho's only factory-direct Mercury dealer. Shop RVs, boats, and Mercury outboard motors. 4.7★ from 1,200+ reviews. Serving Twin Falls, Burley, Boise.`,
   keywords: ['RV dealer Twin Falls Idaho', 'boat dealer Twin Falls', 'Mercury outboard dealer Idaho', 'RV for sale Jerome Idaho', 'travel trailer Idaho', 'pontoon boat Idaho'],
   openGraph: {
     type: 'website',
@@ -35,6 +35,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="min-h-full flex flex-col antialiased">
         {children}
+        {/* Podium webchat — add NEXT_PUBLIC_PODIUM_API_KEY to .env.local to activate */}
+        {process.env.NEXT_PUBLIC_PODIUM_API_KEY && (
+          <script
+            src="https://connect.podium.com/widget.js"
+            data-api-token={process.env.NEXT_PUBLIC_PODIUM_API_KEY}
+            id="podium-widget"
+            async
+          />
+        )}
       </body>
     </html>
   )
