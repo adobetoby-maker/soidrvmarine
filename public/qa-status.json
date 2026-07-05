@@ -1,0 +1,32 @@
+{
+  "schema": "atlas-full-monte/1",
+  "runs": [
+    {
+      "iteration": 1,
+      "date": "2026-07-05",
+      "ts": "2026-07-05T16:29:20+00:00",
+      "url": "https://soidrvmarine.worker-bee.app",
+      "pages_tested": 34,
+      "errors_found": 3,
+      "errors_fixed": 3,
+      "beauty": 8.0,
+      "result": "pass",
+      "report": "full-monte-2026-07-05-1011-soidrvmarine-worker-bee-app.md",
+      "agent": "ATLAS"
+    }
+  ],
+  "latest": {
+    "iteration": 1,
+    "date": "2026-07-05",
+    "ts": "2026-07-05T16:29:20+00:00",
+    "url": "https://soidrvmarine.worker-bee.app",
+    "pages_tested": 34,
+    "errors_found": 3,
+    "errors_fixed": 3,
+    "beauty": 8.0,
+    "result": "pass",
+    "report": "full-monte-2026-07-05-1011-soidrvmarine-worker-bee-app.md",
+    "agent": "ATLAS"
+  },
+  "slug": "soidrvmarine"
+}
