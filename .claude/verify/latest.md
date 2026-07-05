@@ -3,7 +3,11 @@
 | Layout / spacing     | Asymmetric hero split, amber border left, parchment bg, amber CTAs — all intact | PASS |
 | Colors / contrast    | Navy/amber/parchment palette consistent across all sections | PASS |
 | Typography           | Display serif "Southern Idaho's Premier RV & Marine Dealer" — hierarchically clear | PASS |
-| Mobile (375px)       | Not captured this pass — ISR confirmed, responsive classes unchanged | PASS |
+| Viewport 375 (mobile @2x) | Hero stacks correctly, sticky header holds, hero photo crops sensibly to portrait; scrolled to 6500px to reach true footer (3800px only reached mid-page on mobile) — footer visible, address/hours/phone all present, second flag-emoji instance caught here in the CTA trust bar | PASS |
+| Viewport 1440 (desktop) | Full hero split renders correctly, footer 4-column grid clean, no overlap; captured pre-second-emoji-fix state (documents the bug before its fix) | PASS |
+| Second emoji fix confirmed | Re-screenshotted live production after redeploy — "Veteran-Owned & Operated" in the CTA trust bar now renders with no flag emoji, matching the hero badge fix | PASS |
+| Viewport 2560 (4K)   | Content stays centered in max-width container, no awkward full-bleed stretch, hero image scales cleanly, footer grid holds at 4 columns | PASS |
+| Viewport 5K (2560@2x)| Identical composition to 2560, confirms no @2x-specific regressions (font rendering, image sharpness) | PASS |
 | Real inventory       | 19 in stock (RVs), 10 in stock (Boats); 27 of 29 units now have real dealer CDN photos (2 confirmed no-photo-exists on dealer's own site, documented in CONTENT-NEEDED.md) | PASS |
 | Correct phone        | (208) 324-4661 in nav, hero, and inline CTA — flagged discrepancy vs. live competitor site's tracking number in CONTENT-NEEDED.md, not changed pending dealer confirmation | PASS |
 | Correct reviews      | 4.7 Stars / 1,203 Google reviews — confirmed in hero AND footer trust bar (footer was hardcoded to stale 4.6/1,200+, fixed to read from DEALER_INFO) | PASS |
