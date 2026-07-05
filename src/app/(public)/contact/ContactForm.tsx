@@ -17,8 +17,9 @@ export function ContactForm({ unitRef }: { unitRef: string | null }) {
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
+    const formEl = e.currentTarget
     setStatus('sending')
-    const form = new FormData(e.currentTarget)
+    const form = new FormData(formEl)
     const payload = Object.fromEntries(form.entries())
 
     try {
@@ -29,7 +30,7 @@ export function ContactForm({ unitRef }: { unitRef: string | null }) {
       })
       if (!res.ok) throw new Error('Send failed')
       setStatus('sent')
-      e.currentTarget.reset()
+      formEl.reset()
     } catch {
       setStatus('error')
     }
