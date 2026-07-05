@@ -4,6 +4,7 @@ Status: Live at https://soidrvmarine.worker-bee.app
 
 ## Priority 1 — Replace Before Full Launch
 
+- [ ] **Phone number discrepancy — confirm with dealer.** We use (208) 324-4661 everywhere (matches the physical yard signage visible in the dealer's own inventory photos). But the live soidrvmarine.com header/nav currently shows a different clickable number, (208) 795-3119 — this has the signature of a call-tracking number (e.g. CallRail) swapped in via JS for a specific ad channel. Ask the dealer: is 795-3119 a tracking number for a particular campaign, or has their primary line actually changed? Do not swap our number until confirmed.
 - [ ] **Podium webchat widget** — not active. Add `NEXT_PUBLIC_PODIUM_API_KEY` to Coolify env vars to turn on live chat (code is already wired in `src/app/layout.tsx:38-46`, gated behind this env var so it silently stays off until the real key lands — no fake widget id has been used).
 - [ ] **2 RV photos — genuinely unavailable, not a placeholder oversight**:
   - 2026 Forest River Palomino SZSS-1240 ($19,420) — dealer's own website serves a placeholder for every current listing of this unit
