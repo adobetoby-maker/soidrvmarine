@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 }
 
 interface Props {
-  searchParams: Promise<{ condition?: string; category?: string; sort?: string }>
+  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string }>
 }
 
 export default async function BoatsPage({ searchParams }: Props) {
@@ -32,10 +32,12 @@ export default async function BoatsPage({ searchParams }: Props) {
   const condition = (params.condition as ConditionFilter) || 'All'
   const category = (params.category as RvCategory) || 'All'
   const sort = (params.sort as SortOption) || 'price-desc'
+  const brand = params.brand || 'All'
 
   const inventory = await getBoatInventory()
-  const filtered = filterAndSortRvs(inventory, condition, category, sort)
+  const filtered = filterAndSortRvs(inventory, condition, category, sort, brand)
   const allCategories = [...new Set(inventory.map(u => u.category))].sort()
+  const allBrands = [...new Set(inventory.map(u => u.make))].sort()
 
   return (
     <>
@@ -63,9 +65,11 @@ export default async function BoatsPage({ searchParams }: Props) {
               condition={condition}
               category={category}
               sort={sort}
+              brand={brand}
               totalCount={inventory.length}
               filteredCount={filtered.length}
               categories={allCategories}
+              brands={allBrands}
               label="boats"
             />
           </Suspense>

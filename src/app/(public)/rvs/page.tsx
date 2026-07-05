@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 const KNOWN_CATEGORIES = ['Travel Trailer', 'Fifth Wheel', 'Class A', 'Class B', 'Class C', 'Toy Hauler']
 
 interface Props {
-  searchParams: Promise<{ condition?: string; category?: string; sort?: string }>
+  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string }>
 }
 
 export default async function RvsPage({ searchParams }: Props) {
@@ -35,10 +35,12 @@ export default async function RvsPage({ searchParams }: Props) {
   const condition = (params.condition as ConditionFilter) || 'All'
   const category = (params.category as RvCategory) || 'All'
   const sort = (params.sort as SortOption) || 'price-desc'
+  const brand = params.brand || 'All'
 
   const inventory = await getRvInventory()
-  const filtered = filterAndSortRvs(inventory, condition, category, sort)
+  const filtered = filterAndSortRvs(inventory, condition, category, sort, brand)
   const allCategories = [...new Set(inventory.map(u => u.category))].sort()
+  const allBrands = [...new Set(inventory.map(u => u.make))].sort()
 
   return (
     <>
@@ -66,9 +68,11 @@ export default async function RvsPage({ searchParams }: Props) {
               condition={condition}
               category={category}
               sort={sort}
+              brand={brand}
               totalCount={inventory.length}
               filteredCount={filtered.length}
               categories={allCategories}
+              brands={allBrands}
               label="RVs"
             />
           </Suspense>

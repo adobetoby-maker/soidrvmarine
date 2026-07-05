@@ -9,13 +9,15 @@ interface Props {
   condition: ConditionFilter
   category: RvCategory
   sort: SortOption
+  brand: string
   totalCount: number
   filteredCount: number
   categories: string[]
+  brands: string[]
   label?: string
 }
 
-export function InventoryFilters({ condition, category, sort, totalCount, filteredCount, categories, label = 'units' }: Props) {
+export function InventoryFilters({ condition, category, sort, brand, totalCount, filteredCount, categories, brands, label = 'units' }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -56,6 +58,7 @@ export function InventoryFilters({ condition, category, sort, totalCount, filter
 
   const CONDITIONS: ConditionFilter[] = ['All', 'New', 'Used']
   const CATS: RvCategory[] = ['All', ...categories as RvCategory[]]
+  const BRANDS: string[] = ['All', ...brands]
   const SORTS: { value: SortOption; label: string }[] = [
     { value: 'price-desc', label: 'Price: High → Low' },
     { value: 'price-asc', label: 'Price: Low → High' },
@@ -103,7 +106,7 @@ export function InventoryFilters({ condition, category, sort, totalCount, filter
       </div>
 
       {/* Category chips */}
-      <div>
+      <div style={{ marginBottom: '0.75rem' }}>
         <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Type</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {CATS.map(c => (
@@ -113,6 +116,20 @@ export function InventoryFilters({ condition, category, sort, totalCount, filter
           ))}
         </div>
       </div>
+
+      {/* Brand chips */}
+      {brands.length > 1 && (
+        <div>
+          <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Brand</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {BRANDS.map(b => (
+              <button key={b} style={b === brand ? chipActive : chipInactive} onClick={() => update('brand', b)}>
+                {b}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

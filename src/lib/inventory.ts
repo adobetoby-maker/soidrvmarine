@@ -233,10 +233,12 @@ export function filterAndSortRvs(
   condition: ConditionFilter,
   category: RvCategory,
   sort: SortOption,
+  brand: string = 'All',
 ): InventoryUnit[] {
   let result = [...inventory]
   if (condition !== 'All') result = result.filter(u => u.condition === condition)
   if (category !== 'All') result = result.filter(u => u.category === category)
+  if (brand !== 'All') result = result.filter(u => u.make === brand)
   result.sort((a, b) => {
     const ap = a.price ?? 999999
     const bp = b.price ?? 999999
