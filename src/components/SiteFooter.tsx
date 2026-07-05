@@ -20,8 +20,8 @@ export function SiteFooter() {
         <div style={{ maxWidth: 1400, margin: '0 auto', display: 'flex', flexWrap: 'wrap', gap: '1.5rem', justifyContent: 'center', alignItems: 'center' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.875rem' }}>
             <Star size={14} fill="var(--color-amber)" color="var(--color-amber)" />
-            <span style={{ color: 'white', fontWeight: 600 }}>4.6★</span>
-            <span>from 1,200+ reviews</span>
+            <span style={{ color: 'white', fontWeight: 600 }}>{DEALER_INFO.reviewScore}★</span>
+            <span>from {DEALER_INFO.reviewCount.toLocaleString()}+ reviews</span>
           </div>
           <div style={{ width: 1, height: 16, background: 'rgba(255,255,255,0.15)' }} aria-hidden />
           <span style={{ fontSize: '0.875rem' }}>🇺🇸 Veteran-Owned &amp; Operated</span>

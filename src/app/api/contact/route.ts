@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
   try {
     await resend.emails.send({
-      from: 'Southern Idaho RV & Marine Website <onboarding@resend.dev>',
+      from: 'Demo SIRVMarine <onboarding@resend.dev>',
       to: DEALER_INFO.email,
       replyTo: email,
       subject: `Website Inquiry: ${subject || 'General question'} — ${firstName} ${lastName}`,

@@ -662,7 +662,7 @@ export default function HomePage() {
             Ready to find your next adventure?
           </h2>
           <p style={{ color: 'oklch(72% 0.015 220)', marginBottom: '1.75rem', fontSize: '1.0625rem' }}>
-            Browse 300+ RVs, boats, and motors — or call us to talk with a specialist.
+            Browse our RVs, boats, and Mercury outboards — or call us to talk with a specialist.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/rvs" style={{
