@@ -34,6 +34,7 @@ type DbRow = {
 const CATEGORY_MAP: Record<string, string> = {
   'fifth-wheel':    'Fifth Wheel',
   'travel-trailer': 'Travel Trailer',
+  'pop-up-camper':  'Pop-Up Camper',
   'class-a':        'Class A',
   'class-b':        'Class B',
   'class-c':        'Class C',

@@ -10,25 +10,25 @@ import { DEALER_INFO } from '@/lib/types'
 export const metadata: Metadata = {
   title: 'Southern Idaho RV & Marine | Jerome & Twin Falls, ID',
   description:
-    "Southern Idaho's only factory-direct Mercury dealer. Shop new and used RVs, boats, and Mercury outboard motors in Jerome, Idaho. 4.6★ from 1,200+ reviews. Serving Twin Falls, Burley, and all of Magic Valley.",
+    "Southern Idaho's only factory-direct Mercury dealer. Shop new and used RVs, boats, and Mercury outboard motors in Jerome, Idaho. 4.7★ from 1,200+ reviews. Serving Twin Falls, Burley, and all of Magic Valley.",
   alternates: { canonical: `https://${DEALER_INFO.domain}` },
 }
 
 const CATEGORIES = [
   {
     label: 'RVs',
-    sub: 'Travel Trailers · Fifth Wheels · Motorhomes',
-    count: '220+ units',
+    sub: 'Travel Trailers · Fifth Wheels · Pop-Ups',
+    count: '19 in stock',
     href: '/rvs',
-    photo: 'https://picsum.photos/id/28/900/600',
+    photo: 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/14102224/7b08527f-22da-42a2-9bb0-42cda7be18d3.jpeg',
     size: 'large',
   },
   {
     label: 'Boats',
-    sub: 'Pontoon · Bass · Fishing',
-    count: '80+ units',
+    sub: 'Pontoon · Fishing · MirroCraft',
+    count: '10 in stock',
     href: '/boats',
-    photo: 'https://picsum.photos/id/67/600/400',
+    photo: 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13844153/3d894568-6112-4531-b3aa-b912c478eb5b.jpeg',
     size: 'small',
   },
   {
@@ -41,31 +41,41 @@ const CATEGORIES = [
   },
 ]
 
+const CDN = 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory'
+
 const FEATURED = [
   {
-    year: 2025, make: 'Grand Design', model: 'Reflection 311BHS',
-    type: 'Fifth Wheel', condition: 'New' as const,
-    price: 74995, photo: 'https://picsum.photos/id/244/600/420', slug: '2025-grand-design-reflection-311bhs-rv001',
+    year: 2026, make: 'Keystone', model: 'Hideout 262BHSWE',
+    type: 'Travel Trailer', condition: 'New' as const,
+    price: 25250,
+    photo: `${CDN}/14102224/7b08527f-22da-42a2-9bb0-42cda7be18d3.jpeg`,
+    slug: '2026-keystone-hideout-262bhswe-new-travel-trailer-rv003',
   },
   {
-    year: 2024, make: 'Keystone', model: 'Montana 3855BR',
+    year: 2022, make: 'Heartland', model: 'Bighorn 37TB',
     type: 'Fifth Wheel', condition: 'Used' as const,
-    price: 58500, photo: 'https://picsum.photos/id/338/600/420', slug: '2024-keystone-montana-3855br-rv002',
+    price: 38850,
+    photo: `${CDN}/14334871/c3cf23b3-c218-47fc-9d03-ea8a6411498a.jpeg`,
+    slug: '2022-heartland-bighorn-37tb-used-fifth-wheel-rv014',
   },
   {
-    year: 2025, make: 'Bennington', model: '22 SLXP Pontoon',
-    type: 'Pontoon Boat', condition: 'New' as const,
-    price: 42900, photo: 'https://picsum.photos/id/67/600/420', slug: '2025-bennington-22slxp-boat001',
+    year: 2026, make: 'Montego Bay', model: 'C8516',
+    type: 'Pontoon', condition: 'New' as const,
+    price: 31668,
+    photo: `${CDN}/13800664/721a2c73-de8e-4279-9d0c-18e5c5b6dd3d.jpeg`,
+    slug: '2026-montego-bay-c8516-new-pontoon-boat004',
   },
   {
-    year: 2024, make: 'Tracker', model: 'Pro 175 TXW',
-    type: 'Bass Boat', condition: 'Used' as const,
-    price: 18750, photo: 'https://picsum.photos/id/167/600/420', slug: '2024-tracker-pro-175txw-boat002',
+    year: 2026, make: 'MirroCraft', model: 'F176',
+    type: 'Fishing', condition: 'New' as const,
+    price: 40977,
+    photo: `${CDN}/13844153/3d894568-6112-4531-b3aa-b912c478eb5b.jpeg`,
+    slug: '2026-mirrocraft-f176-new-fishing-boat001',
   },
 ]
 
 const TRUST_ITEMS = [
-  { icon: '★', label: '4.6 Stars', sub: '1,247 Google reviews' },
+  { icon: '★', label: '4.7 Stars', sub: '1,203 Google reviews' },
   { icon: '⚑', label: 'Veteran-Owned', sub: 'US Military family business' },
   { icon: '⚓', label: 'Mercury-Exclusive', sub: "Magic Valley's only factory-direct" },
   { icon: '◈', label: 'Third Generation', sub: 'Family-owned since 1993' },
