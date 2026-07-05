@@ -199,7 +199,7 @@ export default function HomePage() {
 
               {/* Inline trust badges */}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem' }}>
-                {['🇺🇸 Veteran-Owned', '⚓ Mercury-Exclusive', '3rd-Generation Family'].map(badge => (
+                {['Veteran-Owned', 'Mercury-Exclusive', '3rd-Generation Family'].map(badge => (
                   <span key={badge} style={{
                     fontSize: '0.8125rem',
                     fontWeight: 500,
@@ -219,8 +219,8 @@ export default function HomePage() {
             <div style={{ position: 'relative', minHeight: 400, overflow: 'hidden' }} className="hero-photo">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://picsum.photos/id/28/1200/900"
-                alt="Southern Idaho lake and mountains — RV and boat country"
+                src="https://images.unsplash.com/photo-1558390326-a5411515258c?fm=jpg&q=80&w=1600&auto=format&fit=crop"
+                alt="Shoshone Falls on the Snake River — Magic Valley, Idaho"
                 style={{
                   position: 'absolute', inset: 0,
                   width: '100%', height: '100%',
@@ -339,7 +339,7 @@ export default function HomePage() {
                   )}
                   <div style={{
                     position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(28,43,56,0.90) 0%, rgba(28,43,56,0.30) 60%, transparent 100%)',
+                    background: 'linear-gradient(to top, rgba(28,43,56,0.95) 0%, rgba(28,43,56,0.60) 65%, transparent 100%)',
                   }} />
                   <div style={{
                     position: 'absolute', bottom: 0, left: 0, right: 0,
