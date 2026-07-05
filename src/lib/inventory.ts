@@ -31,13 +31,13 @@ export const RV_INVENTORY: InventoryUnit[] = [
     stockNumber: 'TG240740',
     year: 2026, make: 'Keystone', model: 'Hideout 21BWE',
     category: 'Travel Trailer', condition: 'New', price: 22850,
-    photo: F(167), lengthFt: 24, sleeps: 6, slideOuts: 1,
+    photo: P('13625754', '28f4c2be-ce12-4220-9b68-1195e4ebb127'), lengthFt: 24, sleeps: 6, slideOuts: 1,
   },
   {
     slug: '2026-keystone-hideout-224mlwe-new-rv002',
     year: 2026, make: 'Keystone', model: 'Hideout 224MLWE',
     category: 'Travel Trailer', condition: 'New', price: 26495,
-    photo: F(250), lengthFt: 25, sleeps: 4, slideOuts: 1,
+    photo: P('13481732', 'a4ee0f19-87f5-4a57-ad2a-84521bc1548a'), lengthFt: 25, sleeps: 4, slideOuts: 1,
   },
   {
     slug: '2026-keystone-hideout-262bhswe-new-rv003',
@@ -51,13 +51,13 @@ export const RV_INVENTORY: InventoryUnit[] = [
     slug: '2026-keystone-passport-170bhwe-new-rv004',
     year: 2026, make: 'Keystone', model: 'Passport 170BHWE',
     category: 'Travel Trailer', condition: 'New', price: 22495,
-    photo: F(64), lengthFt: 20, sleeps: 6, slideOuts: 0,
+    photo: P('13477275', '354b518e-3d2e-454d-a111-a1f369a50bd3'), lengthFt: 20, sleeps: 6, slideOuts: 0,
   },
   {
     slug: '2026-keystone-passport-210rkcwe-new-rv005',
     year: 2026, make: 'Keystone', model: 'Passport 210RKCWE',
     category: 'Travel Trailer', condition: 'New', price: 27250,
-    photo: F(131), lengthFt: 24, sleeps: 4, slideOuts: 1,
+    photo: P('14186825', '559dbaf0-7449-4856-a285-54502e1b5594'), lengthFt: 24, sleeps: 4, slideOuts: 1,
   },
   {
     slug: '2026-keystone-passport-229bhwe-new-rv006',
@@ -77,28 +77,30 @@ export const RV_INVENTORY: InventoryUnit[] = [
     slug: '2026-keystone-passport-253rd-new-rv008',
     year: 2026, make: 'Keystone', model: 'Passport 253RD',
     category: 'Travel Trailer', condition: 'New', price: 34250,
-    photo: F(257), lengthFt: 28, sleeps: 6, slideOuts: 1,
+    photo: P('13629231', '879e40c6-c46d-4d9b-9e74-f9d3871f94e4'), lengthFt: 28, sleeps: 6, slideOuts: 1,
   },
   {
     slug: '2026-keystone-passport-2605rb-new-rv009',
     year: 2026, make: 'Keystone', model: 'Passport 2605RB',
     category: 'Travel Trailer', condition: 'New', price: 38900,
-    photo: F(398), lengthFt: 30, sleeps: 4, slideOuts: 2,
+    photo: P('13477273', '4d8f2964-b6e2-4bad-9595-7bca5e358d9f'), lengthFt: 30, sleeps: 4, slideOuts: 2,
   },
   // ── New Forest River Palomino Pop-Up Campers ──────────────────────────────
   {
     slug: '2026-forest-river-palomino-rcss-1605-new-rv010',
     year: 2026, make: 'Forest River', model: 'Palomino RCSS-1605',
     category: 'Pop-Up Camper', condition: 'New', price: 18313,
-    photo: F(91), lengthFt: 16, sleeps: 6, slideOuts: 0,
+    photo: P('13893186', '1aeb7c49-afd3-4789-b14a-8a9e466ac61f'), lengthFt: 16, sleeps: 6, slideOuts: 0,
   },
   {
+    // Confirmed: no real photo exists on dealer site — every current listing serves their own placeholder
     slug: '2026-forest-river-palomino-szss-1240-new-rv011',
     year: 2026, make: 'Forest River', model: 'Palomino SZSS-1240',
     category: 'Pop-Up Camper', condition: 'New', price: 19420,
     photo: F(197), lengthFt: 12, sleeps: 4, slideOuts: 0,
   },
   {
+    // Confirmed: no real photo exists on dealer site — every current listing serves their own placeholder
     slug: '2026-forest-river-palomino-szss-500-new-rv012',
     year: 2026, make: 'Forest River', model: 'Palomino SZSS-500',
     category: 'Pop-Up Camper', condition: 'New', price: 16420,
@@ -120,10 +122,11 @@ export const RV_INVENTORY: InventoryUnit[] = [
     lengthFt: 42, sleeps: 6, slideOuts: 4,
   },
   {
+    // Photo from current 2022 listing of same trim/floorplan — 2020 model year no longer in stock, price/condition match
     slug: '2020-crossroads-cruiser-22bbh-used-rv015',
     year: 2020, make: 'CrossRoads', model: 'Cruiser 22BBH',
     category: 'Travel Trailer', condition: 'Used', price: 21750,
-    photo: F(317), lengthFt: 25, sleeps: 6, slideOuts: 1,
+    photo: P('13513659', '76005a74-989b-4191-aa7b-13e33e465afa'), lengthFt: 25, sleeps: 6, slideOuts: 1,
   },
   {
     slug: '2021-keystone-coleman-2715rl-used-rv016',
@@ -167,13 +170,13 @@ export const BOAT_INVENTORY: InventoryUnit[] = [
     slug: '2026-mirrocraft-f1768-new-boat002',
     year: 2026, make: 'MirroCraft', model: 'F1768',
     category: 'Fishing', condition: 'New', price: 40749,
-    photo: F(119), lengthFt: 17,
+    photo: P('13852859', '180e7cc6-bd7f-4e40-b8c7-997a5a146e48'), lengthFt: 17,
   },
   {
     slug: '2026-mirrocraft-f1768-blk-new-boat003',
     year: 2026, make: 'MirroCraft', model: 'F1768 BLK Edition',
     category: 'Fishing', condition: 'New', price: 40017,
-    photo: F(158), lengthFt: 17,
+    photo: P('13692385', '77b22bde-1403-4a2e-a634-e8df332e8998'), lengthFt: 17,
   },
   // ── New Montego Bay Pontoons ──────────────────────────────────────────────
   {
@@ -186,13 +189,13 @@ export const BOAT_INVENTORY: InventoryUnit[] = [
     slug: '2026-montego-bay-f8518-new-boat005',
     year: 2026, make: 'Montego Bay', model: 'F8518',
     category: 'Pontoon', condition: 'New', price: 31166,
-    photo: F(15), lengthFt: 18,
+    photo: P('13800665', 'e79e0857-c1ea-4866-9981-b845b4f4b7e7'), lengthFt: 18,
   },
   {
     slug: '2026-montego-bay-f8522-new-boat006',
     year: 2026, make: 'Montego Bay', model: 'F8522',
     category: 'Pontoon', condition: 'New', price: 38889,
-    photo: F(174), lengthFt: 22,
+    photo: P('13852851', '6e864d03-5fc9-4d97-a11c-bfa7279f1dc9'), lengthFt: 22,
   },
   {
     slug: '2026-montego-bay-tt8524-new-boat007',

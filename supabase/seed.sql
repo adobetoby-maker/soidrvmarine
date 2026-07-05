@@ -94,21 +94,22 @@ select u.id,
     when 'boat008'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/14094529/a595531c-9b08-49b3-871e-10631aef6e03.jpeg'
     when 'boat009'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/12892042/0de041af-1761-4364-9895-4fe999a11e51.jpeg'
     when 'boat010'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/14203148/3fbe1330-f1d8-492c-be2d-d6bd90340354.jpeg'
-    -- Picsum fallback for units without confirmed CDN photo IDs yet
-    when 'rv001'    then 'https://picsum.photos/id/167/800/560'
-    when 'rv002'    then 'https://picsum.photos/id/250/800/560'
-    when 'rv004'    then 'https://picsum.photos/id/64/800/560'
-    when 'rv005'    then 'https://picsum.photos/id/131/800/560'
-    when 'rv008'    then 'https://picsum.photos/id/12/800/560'
-    when 'rv009'    then 'https://picsum.photos/id/257/800/560'
-    when 'rv010'    then 'https://picsum.photos/id/91/800/560'
+    -- CDN photos confirmed 2026-07-05 (second scrape pass — 12 of 14 remaining placeholders resolved)
+    when 'rv001'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13625754/28f4c2be-ce12-4220-9b68-1195e4ebb127.jpeg'
+    when 'rv002'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13481732/a4ee0f19-87f5-4a57-ad2a-84521bc1548a.jpeg'
+    when 'rv004'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13477275/354b518e-3d2e-454d-a111-a1f369a50bd3.jpeg'
+    when 'rv005'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/14186825/559dbaf0-7449-4856-a285-54502e1b5594.jpeg'
+    when 'rv008'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13629231/879e40c6-c46d-4d9b-9e74-f9d3871f94e4.jpeg'
+    when 'rv009'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13477273/4d8f2964-b6e2-4bad-9595-7bca5e358d9f.jpeg'
+    when 'rv010'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13893186/1aeb7c49-afd3-4789-b14a-8a9e466ac61f.jpeg'
+    when 'rv015'    then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13513659/76005a74-989b-4191-aa7b-13e33e465afa.jpeg'
+    when 'boat002'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13852859/180e7cc6-bd7f-4e40-b8c7-997a5a146e48.jpeg'
+    when 'boat003'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13692385/77b22bde-1403-4a2e-a634-e8df332e8998.jpeg'
+    when 'boat005'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13800665/e79e0857-c1ea-4866-9981-b845b4f4b7e7.jpeg'
+    when 'boat006'  then 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13852851/6e864d03-5fc9-4d97-a11c-bfa7279f1dc9.jpeg'
+    -- Confirmed no real photo exists on dealer site (both listings serve their own placeholder)
     when 'rv011'    then 'https://picsum.photos/id/197/800/560'
     when 'rv012'    then 'https://picsum.photos/id/236/800/560'
-    when 'rv015'    then 'https://picsum.photos/id/317/800/560'
-    when 'boat002'  then 'https://picsum.photos/id/119/800/560'
-    when 'boat003'  then 'https://picsum.photos/id/158/800/560'
-    when 'boat005'  then 'https://picsum.photos/id/15/800/560'
-    when 'boat006'  then 'https://picsum.photos/id/174/800/560'
   end as url,
   0 as sort_order,
   true as is_primary,

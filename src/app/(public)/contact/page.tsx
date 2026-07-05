@@ -1,6 +1,7 @@
 // Built by ATLAS — 2026-07-04
 import type { Metadata } from 'next'
 import { DEALER_INFO } from '@/lib/types'
+import { ContactForm } from './ContactForm'
 
 export const metadata: Metadata = {
   title: 'Contact Us — Southern Idaho RV & Marine | Jerome, Idaho',
@@ -151,104 +152,7 @@ export default async function ContactPage({ searchParams }: Props) {
             Prefer a call? Dial <a href={DEALER_INFO.phoneHref} style={{ color: 'var(--color-amber)', fontWeight: 600, textDecoration: 'none' }}>{DEALER_INFO.phone}</a> — we answer during business hours.
           </p>
 
-          {/* [DEMO] Contact form — replace with Resend-backed server action or Formspree endpoint */}
-          <form
-            action={`mailto:${DEALER_INFO.email}`}
-            method="GET"
-            style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
-          >
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              <div>
-                <label htmlFor="contact-first" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>First Name</label>
-                <input
-                  id="contact-first"
-                  name="firstName"
-                  type="text"
-                  required
-                  autoComplete="given-name"
-                  style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box' }}
-                />
-              </div>
-              <div>
-                <label htmlFor="contact-last" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>Last Name</label>
-                <input
-                  id="contact-last"
-                  name="lastName"
-                  type="text"
-                  required
-                  autoComplete="family-name"
-                  style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box' }}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="contact-phone" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>Phone</label>
-              <input
-                id="contact-phone"
-                name="phone"
-                type="tel"
-                autoComplete="tel"
-                style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="contact-email" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>Email</label>
-              <input
-                id="contact-email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="contact-subject" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>I'm interested in…</label>
-              <select
-                id="contact-subject"
-                name="subject"
-                style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box', appearance: 'none' }}
-              >
-                {unitRef
-                  ? <option value={`Unit #${unitRef}`}>{`Unit #${unitRef} — specific unit inquiry`}</option>
-                  : null}
-                <option value="RV">A specific RV</option>
-                <option value="Boat">A specific boat</option>
-                <option value="Mercury">Mercury outboard motors</option>
-                <option value="Trade-In">Trading in my current unit</option>
-                <option value="Financing">Financing options</option>
-                <option value="Service">Service &amp; repair</option>
-                <option value="General">General question</option>
-              </select>
-            </div>
-
-            <div>
-              <label htmlFor="contact-message" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-navy)', marginBottom: '0.375rem' }}>Message</label>
-              <textarea
-                id="contact-message"
-                name="body"
-                rows={4}
-                style={{ width: '100%', padding: '0.625rem 0.75rem', border: '1.5px solid var(--color-parchment-dark)', borderRadius: 8, fontSize: '0.9375rem', color: 'var(--color-navy)', background: 'white', boxSizing: 'border-box', resize: 'vertical', lineHeight: 1.55 }}
-                placeholder={unitRef ? `I'd like to know more about unit #${unitRef}…` : 'How can we help you?'}
-              />
-            </div>
-
-            <button
-              type="submit"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', padding: '0.875rem 1.5rem', background: 'var(--color-navy)', color: 'white', fontWeight: 700, borderRadius: 8, border: 'none', fontSize: '0.9375rem', cursor: 'pointer' }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Send Message
-            </button>
-
-            <p style={{ fontSize: '0.75rem', color: 'var(--color-sage)', lineHeight: 1.5 }}>
-              {/* [DEMO] form action is mailto: — replace with a Resend server action before launch */}
-              By sending a message you agree we may contact you about your inquiry.
-            </p>
-          </form>
+          <ContactForm unitRef={unitRef} />
         </div>
       </div>
 
