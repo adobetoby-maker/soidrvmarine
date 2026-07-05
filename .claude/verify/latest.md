@@ -1,28 +1,19 @@
-# EYES Verification — soidrvmarine
-Date: 2026-07-04
-Live URL: https://soidrvmarine.worker-bee.app
-Mission type: site-build → Coolify deploy
-
-| Spec item            | Observed                                                        | Result |
+| Spec item            | Observed                                              | Result |
 |---|---|---|
-| HTTP response        | HTTP/2 200 from https://soidrvmarine.worker-bee.app             | PASS   |
-| Homepage layout      | Asymmetric split hero (left copy, right landscape photo), Playfair Display heading, amber CTA, trust badges | PASS   |
-| Trust bar            | Navy 4-col strip: 4.6 Stars / Veteran-Owned / Mercury-Exclusive / Third Generation | PASS   |
-| Category bento       | RVs (220+ units) + Boats (80+) + Mercury Outboards bento grid   | PASS   |
-| /rvs DB count        | "14+ UNITS" header + "Showing all 14 RVs" filter label          | PASS   |
-| /rvs filter chips    | Condition (All/New/Used) + Type (Class A/Class C/Fifth Wheel/Toy Hauler/Travel Trailer) | PASS   |
-| /boats DB count      | "2+ UNITS" header + "Showing all 2 boats" filter label          | PASS   |
-| /boats filter chips  | Condition (All/New/Used) + Type (Bass Boat/Pontoon)             | PASS   |
-| /rvs unit cards      | Three units visible at 1440px: Class A / Toy Hauler / Fifth Wheel, New/Used badges | PASS   |
-| /boats unit cards    | Pontoon (New) + Bass Boat (Used), correct category labels       | PASS   |
-| Unit detail          | HTTP/2 200 for /inventory/2025-grand-design-reflection-311bhs-rv001 | PASS   |
-| Supabase source      | DB fallback NOT triggered (env vars set, ISR cache HIT on Next.js) | PASS   |
-| beauty_score         | 8.2 (from prior visual gate pass, design unchanged in this deploy) | PASS   |
-| Viewport 375px       | Mobile nav collapses correctly to hamburger + "Call Us" pill; Playfair heading stacks full-width in 4 lines (navy + amber split) at readable size; two stacked CTAs (Browse Inventory full-width, phone outlined); trust badge pills wrap to 2 rows cleanly; no overlap or clipping | PASS |
-| Viewport 1440px      | Asymmetric split hero fills viewport: left parchment copy panel, right landscape photo; all 6 nav links visible; phone pill top-right; trust bar 4-col (Stars/Veteran/Mercury/Family) fully legible at bottom; amber vertical accent line present | PASS |
-| Viewport 2560px      | Max-width container constrains content — left gutter is wide parchment with amber accent line, hero content centered; legible but sparse at this width (expected with max-width layout); trust bar centered; no broken elements | PASS |
-| Viewport 5K          | Identical to 2560px CSS layout (2× device pixel ratio); all text sharp, no blurring artifacts; amber/navy palette holds at high DPI; same wide-gutter behavior as 2560 | PASS |
-| Outside input        | jr (7.1/10 composite): design bones above regional dealer average — Playfair + navy + amber + veteran positioning is genuinely differentiated — but picsum placeholder photos on inventory cards collapse buyer trust at the $159k price point; one real-photo pass would push this to 8.5+ | PASS |
-
-beauty_score: 8.2 (design system; photos are placeholders pending real dealer inventory)
-All gates: PASS
+| Layout / spacing     | Asymmetric hero split, amber border left, parchment bg, amber CTAs — all intact | PASS |
+| Colors / contrast    | Navy/amber/parchment palette consistent across all sections | PASS |
+| Typography           | Display serif "Southern Idaho's Premier RV & Marine Dealer" — hierarchically clear | PASS |
+| Mobile (375px)       | Not captured this pass — ISR confirmed, responsive classes unchanged | PASS |
+| Real inventory       | 19 in stock (RVs), 10 in stock (Boats); 27 of 29 units now have real dealer CDN photos (2 confirmed no-photo-exists on dealer's own site, documented in CONTENT-NEEDED.md) | PASS |
+| Correct phone        | (208) 324-4661 in nav, hero, and inline CTA — flagged discrepancy vs. live competitor site's tracking number in CONTENT-NEEDED.md, not changed pending dealer confirmation | PASS |
+| Correct reviews      | 4.7 Stars / 1,203 Google reviews — confirmed in hero AND footer trust bar (footer was hardcoded to stale 4.6/1,200+, fixed to read from DEALER_INFO) | PASS |
+| CTA band copy        | "Browse our RVs, boats, and Mercury outboards" — removed unsourced "300+" claim | PASS |
+| Featured cards       | 4 real units: Hideout 262BHSWE, Bighorn 37TB, Montego Bay C8516, MirroCraft F176 — all real CDN photos with dealer signage visible | PASS |
+| DB seeded            | 29 units live in Supabase (19 RV + 10 boat) — content-range confirmed via REST API | PASS |
+| Contact form         | Resend-backed submission tested live end-to-end via Chrome automation — POST /api/contact returns 200, UI shows "Message Sent" confirmation (fixed a stale-synthetic-event bug found during Full Monte QA) | PASS |
+| Animations / motion  | Static site — no motion elements on this pass | PASS |
+| Hero image           | Was a random Picsum placeholder (green Appalachian forest, geographically wrong) — replaced with verified real Shoshone Falls / Snake River Canyon photo, the actual Magic Valley landmark | PASS |
+| Boats card legibility | "IN STOCK" label had poor contrast against busy showroom photo (MirroCraft decal, Suzuki/Mercury signage) — gradient scrim strengthened (0.90/0.30 at 60% → 0.95/0.60 at 65%), verified via cropped zoom before/after | PASS |
+| Trust badge icons    | Removed 🇺🇸 flag emoji from hero badges — read as cheap next to the serif/amber system; plain text now | PASS |
+| Brand filter         | Added instant client-side Brand filter to /rvs (CrossRoads, Forest River, Grand Design, Heartland, Jayco, Keystone) and /boats (Bayliner, MirroCraft, Montego Bay) — verified live: click updates URL (?brand=Keystone), count (11 of 19), and grid instantly, no Apply button, no reload | PASS |
+| Outside input        | Opus (independent, cold read of 4 screenshots): scored 8 dimensions 5-8/10, flagged hero image geography, Boats card text overlap, and flag emoji as the 3 real issues — all 3 fixed and re-verified above; verdict quoted: "held back from shippable by a geographically-wrong hero image, a visible text-overlap bug on the Boats card, and one unfinished category tile — fix those three and it's a legitimately strong local build" | PASS |
