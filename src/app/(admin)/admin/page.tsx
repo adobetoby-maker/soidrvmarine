@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { RV_INVENTORY, BOAT_INVENTORY } from '@/lib/inventory'
 import type { ChannelId } from '@/lib/types'
+import { SocialAutopilot } from '@/components/admin/SocialAutopilot'
 
 export const metadata: Metadata = {
   title: 'Admin — Southern Idaho RV & Marine',
@@ -304,6 +305,9 @@ export default function AdminPage() {
         </div>
       </div>
 
+      {/* ── Social Autopilot (full-managed add-on) ──────────────────────────── */}
+      <SocialAutopilot />
+
       {/* ── Week 0 Setup checklist ──────────────────────────────────────────── */}
       <div style={card}>
         <p style={label12}>Setup Checklist — Getting to Production</p>
@@ -311,7 +315,7 @@ export default function AdminPage() {
           {[
             { done: true,  text: 'Supabase project provisioned' },
             { done: true,  text: 'DB migrations run (3 files)' },
-            { done: true,  text: 'Real inventory seeded (19 RVs + 10 boats)' },
+            { done: true,  text: 'Real inventory seeded (49 RVs + 18 boats)' },
             { done: true,  text: 'Home, RVs, Boats, Detail pages live' },
             { done: true,  text: 'Photo CDN wired (Endeavor Suite)' },
             { done: false, text: 'DeskManager API credentials — get from DMS admin' },

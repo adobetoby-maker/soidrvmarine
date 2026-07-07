@@ -234,28 +234,35 @@ export function getPrimaryImage(unit: Unit): string | null {
 
 // ── SEO helpers ───────────────────────────────────────────────────────────
 
+// DEALER_INFO is the flat, backwards-compatible view of the canonical dealer
+// config in src/config/dealer.config.ts. Every client-specific value now lives
+// in ONE place (the config); this derives the flat shape the app already imports
+// in ~30 files, so nothing downstream had to change. To clone a new dealer, edit
+// the config — not this. See TEMPLATE.md.
+import { DEALER } from '@/config/dealer.config'
+
 export const DEALER_INFO = {
-  name: 'Southern Idaho RV & Marine',
-  shortName: 'SI RV & Marine',
-  address: '60 Bob Barton Road',
-  city: 'Jerome',
-  state: 'ID',
-  zip: '83338',
-  phone: '(208) 324-4661',
-  phoneHref: 'tel:+12083244661',
-  email: 'info@soidrvmarine.com',
-  lat: 42.7258,
-  lng: -114.5191,
-  tagline: 'Southern Idaho\'s Only Factory-Direct Mercury Dealer',
-  heroLine: 'Veterans Serving Idaho Families',
-  reviewCount: 1203,
-  reviewScore: 4.7,
-  yearsInBusiness: 32,
-  domain: 'soidrvmarine.com',
-  gbpUrl: 'https://g.page/southern-idaho-rv-marine',
-  fbUrl: 'https://facebook.com/soidrvmarine',
-  instagramUrl: 'https://instagram.com/soidrvmarine',
-  youtubeUrl: 'https://youtube.com/@soidrvmarine',
-  xUrl: 'https://x.com/soidrvmarine',
-  directionsUrl: 'https://maps.google.com/?q=60+Bob+Barton+Road+Jerome+ID+83338',
+  name: DEALER.identity.name,
+  shortName: DEALER.identity.shortName,
+  address: DEALER.identity.address,
+  city: DEALER.identity.city,
+  state: DEALER.identity.state,
+  zip: DEALER.identity.zip,
+  phone: DEALER.identity.phone,
+  phoneHref: DEALER.identity.phoneHref,
+  email: DEALER.identity.email,
+  lat: DEALER.identity.lat,
+  lng: DEALER.identity.lng,
+  tagline: DEALER.brand.tagline,
+  heroLine: DEALER.brand.heroLine,
+  reviewCount: DEALER.brand.reviewCount,
+  reviewScore: DEALER.brand.reviewScore,
+  yearsInBusiness: DEALER.brand.yearsInBusiness,
+  domain: DEALER.identity.domain,
+  gbpUrl: DEALER.social.gbpUrl,
+  fbUrl: DEALER.social.fbUrl,
+  instagramUrl: DEALER.social.instagramUrl,
+  youtubeUrl: DEALER.social.youtubeUrl,
+  xUrl: DEALER.social.xUrl,
+  directionsUrl: DEALER.identity.directionsUrl,
 }
