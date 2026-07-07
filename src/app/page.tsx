@@ -222,7 +222,7 @@ export default function HomePage() {
             <div style={{ position: 'relative', minHeight: 400, overflow: 'hidden' }} className="hero-photo">
               <HeroVideo
                 poster="/hero-poster.jpg"
-                videoSrc="/hero-loop.mp4"
+                videoSrc="/api/hero-video"
                 alt="A boat on a Southern Idaho reservoir and an RV camped on the shore at golden hour — Magic Valley"
               />
               <div style={{
