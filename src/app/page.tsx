@@ -5,6 +5,9 @@ import type { Metadata } from 'next'
 import { SiteNav } from '@/components/SiteNav'
 import { SiteFooter } from '@/components/SiteFooter'
 import { UnitCard } from '@/components/inventory/UnitCard'
+import { HeroVideo } from '@/components/HeroVideo'
+import { BrandStrip } from '@/components/BrandStrip'
+import { HomeJsonLd } from '@/components/HomeJsonLd'
 import { DEALER_INFO } from '@/lib/types'
 
 export const metadata: Metadata = {
@@ -18,7 +21,7 @@ const CATEGORIES = [
   {
     label: 'RVs',
     sub: 'Travel Trailers · Fifth Wheels · Pop-Ups',
-    count: '19 in stock',
+    count: '49 in stock',
     href: '/rvs',
     photo: 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/14102224/7b08527f-22da-42a2-9bb0-42cda7be18d3.jpeg',
     size: 'large',
@@ -26,7 +29,7 @@ const CATEGORIES = [
   {
     label: 'Boats',
     sub: 'Pontoon · Fishing · MirroCraft',
-    count: '10 in stock',
+    count: '18 in stock',
     href: '/boats',
     photo: 'https://cdnmedia.endeavorsuite.com/images/organizations/stg/bf41b29b-1565-450b-9e8b-110c69e10a95/inventory/13844153/3d894568-6112-4531-b3aa-b912c478eb5b.jpeg',
     size: 'small',
@@ -49,7 +52,7 @@ const FEATURED = [
     type: 'Travel Trailer', condition: 'New' as const,
     price: 25250,
     photo: `${CDN}/14102224/7b08527f-22da-42a2-9bb0-42cda7be18d3.jpeg`,
-    slug: '2026-keystone-hideout-262bhswe-new-travel-trailer-rv003',
+    slug: '2026-keystone-hideout-262bhswe-new-rv003',
   },
   {
     year: 2022, make: 'Heartland', model: 'Bighorn 37TB',
@@ -63,14 +66,14 @@ const FEATURED = [
     type: 'Pontoon', condition: 'New' as const,
     price: 31668,
     photo: `${CDN}/13800664/721a2c73-de8e-4279-9d0c-18e5c5b6dd3d.jpeg`,
-    slug: '2026-montego-bay-c8516-new-pontoon-boat004',
+    slug: '2026-montego-bay-c8516-new-boat004',
   },
   {
     year: 2026, make: 'MirroCraft', model: 'F176',
     type: 'Fishing', condition: 'New' as const,
     price: 40977,
     photo: `${CDN}/13844153/3d894568-6112-4531-b3aa-b912c478eb5b.jpeg`,
-    slug: '2026-mirrocraft-f176-new-fishing-boat001',
+    slug: '2026-mirrocraft-f176-new-boat001',
   },
 ]
 
@@ -215,18 +218,12 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right: photo */}
+            {/* Right: photo/video */}
             <div style={{ position: 'relative', minHeight: 400, overflow: 'hidden' }} className="hero-photo">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1558390326-a5411515258c?fm=jpg&q=80&w=1600&auto=format&fit=crop"
-                alt="Shoshone Falls on the Snake River — Magic Valley, Idaho"
-                style={{
-                  position: 'absolute', inset: 0,
-                  width: '100%', height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center',
-                }}
+              <HeroVideo
+                poster="/hero-poster.jpg"
+                videoSrc="/hero-loop.mp4"
+                alt="A boat on a Southern Idaho reservoir and an RV camped on the shore at golden hour — Magic Valley"
               />
               <div style={{
                 position: 'absolute', inset: 0,
@@ -387,6 +384,8 @@ export default function HomePage() {
             `}</style>
           </div>
         </section>
+
+        <BrandStrip />
 
         {/* ── Featured Inventory ── */}
         <section style={{ background: 'white', padding: '5rem 1.5rem' }}>
@@ -688,6 +687,8 @@ export default function HomePage() {
       </main>
 
       <SiteFooter />
+
+      <HomeJsonLd />
     </>
   )
 }

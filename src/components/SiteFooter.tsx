@@ -70,16 +70,38 @@ export function SiteFooter() {
               ['Fifth Wheels', '/rvs'],
               ['Class A Motorhomes', '/rvs'],
               ['Class C Motorhomes', '/rvs'],
-              ['Pontoon Boats', '/boats'],
-              ['Bass Boats', '/boats'],
+              ['Pontoon &amp; Fishing Boats', '/boats'],
+              ['Powersports', '/powersports'],
               ['Mercury Outboards', '/motors/mercury-outboards'],
+              ['Get a Trade-In Value', '/trade-in'],
+            ].map(([label, href]) => (
+              <Link key={label} href={href} style={{ fontSize: '0.875rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}
+                onMouseEnter={e => (e.currentTarget.style.color = 'white')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'oklch(80% 0.012 220)')}
+                dangerouslySetInnerHTML={{ __html: label }}
+              />
+            ))}
+          </nav>
+        </div>
+
+        {/* Services */}
+        <div>
+          <div style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-sage)', marginBottom: '0.875rem' }}>
+            Services
+          </div>
+          <nav style={{ display: 'flex', flexDirection: 'column', gap: 6 }} aria-label="Services links">
+            {[
+              ['Financing', '/financing'],
+              ['Apply for Financing', '/financing/apply'],
+              ['Parts Request', '/parts'],
+              ['Service Request', '/service'],
+              ['RV &amp; Boat Storage', '/storage'],
             ].map(([label, href]) => (
               <Link key={href} href={href} style={{ fontSize: '0.875rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'white')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'oklch(80% 0.012 220)')}
-              >
-                {label}
-              </Link>
+                dangerouslySetInnerHTML={{ __html: label }}
+              />
             ))}
           </nav>
         </div>
@@ -92,11 +114,10 @@ export function SiteFooter() {
           <nav style={{ display: 'flex', flexDirection: 'column', gap: 6 }} aria-label="Company links">
             {[
               ['About Us', '/about'],
-              ['Financing', '/financing'],
-              ['Service Department', '/contact'],
-              ['Parts &amp; Accessories', '/contact'],
+              ['Careers', '/careers'],
+              ['Locations &amp; Hours', '/locations'],
+              ['Idaho Parks &amp; Rec Fees', '/parks-rec'],
               ['Contact', '/contact'],
-              ['Directions from Twin Falls', '/contact#directions'],
             ].map(([label, href]) => (
               <Link key={href} href={href} style={{ fontSize: '0.875rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'white')}
@@ -107,31 +128,29 @@ export function SiteFooter() {
           </nav>
         </div>
 
-        {/* Geo + Social */}
+        {/* Legal + Connect */}
         <div>
           <div style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-sage)', marginBottom: '0.875rem' }}>
-            Service Area
+            Legal
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: '1.5rem' }}>
             {[
-              ['RV Dealer — Twin Falls', '/rv-dealer-twin-falls-id'],
-              ['Boat Dealer — Twin Falls', '/boat-dealer-twin-falls-id'],
-              ['Mercury Dealer — Magic Valley', '/mercury-dealer-magic-valley'],
-              ['Serving Burley, ID', '/rv-dealer-burley-id'],
-              ['Serving Boise, ID', '/rv-dealer-boise-id'],
+              ['Terms &amp; Conditions', '/terms'],
+              ['Return Policy', '/returns'],
+              ['Accessibility', '/accessibility'],
+              ['Privacy', '/privacy'],
             ].map(([label, href]) => (
               <Link key={href} href={href} style={{ fontSize: '0.8125rem', color: 'oklch(75% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'white')}
                 onMouseLeave={e => (e.currentTarget.style.color = 'oklch(75% 0.012 220)')}
-              >
-                {label}
-              </Link>
+                dangerouslySetInnerHTML={{ __html: label }}
+              />
             ))}
           </div>
           <div style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--color-sage)', marginBottom: '0.75rem' }}>
             Connect
           </div>
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <a href={DEALER_INFO.gbpUrl} target="_blank" rel="noopener noreferrer"
               style={{ padding: '0.375rem 0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 6, fontSize: '0.8125rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
               Google
@@ -139,6 +158,18 @@ export function SiteFooter() {
             <a href={DEALER_INFO.fbUrl} target="_blank" rel="noopener noreferrer"
               style={{ padding: '0.375rem 0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 6, fontSize: '0.8125rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
               Facebook
+            </a>
+            <a href={DEALER_INFO.instagramUrl} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '0.375rem 0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 6, fontSize: '0.8125rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
+              Instagram
+            </a>
+            <a href={DEALER_INFO.youtubeUrl} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '0.375rem 0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 6, fontSize: '0.8125rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
+              YouTube
+            </a>
+            <a href={DEALER_INFO.xUrl} target="_blank" rel="noopener noreferrer"
+              style={{ padding: '0.375rem 0.75rem', background: 'rgba(255,255,255,0.06)', borderRadius: 6, fontSize: '0.8125rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)' }}>
+              X
             </a>
           </div>
         </div>

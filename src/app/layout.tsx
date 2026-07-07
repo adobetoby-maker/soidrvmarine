@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { DEALER_INFO } from '@/lib/types'
+import { Analytics } from '@/components/Analytics'
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${DEALER_INFO.domain}`),
@@ -32,6 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <link rel="preconnect" href={process.env.NEXT_PUBLIC_SUPABASE_URL} />
         )}
         {/* LocalBusiness + AutoDealer schema — injected server-side on home page */}
+        {/* GA4 — no-ops cleanly until NEXT_PUBLIC_GA4_ID is set */}
+        <Analytics />
       </head>
       <body className="min-h-full flex flex-col antialiased">
         {children}

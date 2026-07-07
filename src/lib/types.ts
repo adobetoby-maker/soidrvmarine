@@ -254,5 +254,8 @@ export const DEALER_INFO = {
   domain: 'soidrvmarine.com',
   gbpUrl: 'https://g.page/southern-idaho-rv-marine',
   fbUrl: 'https://facebook.com/soidrvmarine',
+  instagramUrl: 'https://instagram.com/soidrvmarine',
+  youtubeUrl: 'https://youtube.com/@soidrvmarine',
+  xUrl: 'https://x.com/soidrvmarine',
   directionsUrl: 'https://maps.google.com/?q=60+Bob+Barton+Road+Jerome+ID+83338',
 }

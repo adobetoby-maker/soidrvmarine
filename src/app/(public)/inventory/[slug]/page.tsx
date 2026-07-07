@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getUnitBySlug, getRvInventory, getBoatInventory } from '@/lib/db'
 import { DEALER_INFO } from '@/lib/types'
+import { PaymentCalculator } from '@/components/PaymentCalculator'
 
 export const revalidate = 3600 // ISR: revalidate hourly
 
@@ -157,6 +158,11 @@ export default async function UnitDetailPage(
                   <span style={{ color: 'var(--color-navy)', fontWeight: 600 }}>{s.value}</span>
                 </div>
               ))}
+            </div>
+
+            {/* Payment calculator — prefilled with this unit's price */}
+            <div style={{ marginTop: '1.5rem' }}>
+              <PaymentCalculator initialPrice={unit.price ?? undefined} compact />
             </div>
           </div>
 

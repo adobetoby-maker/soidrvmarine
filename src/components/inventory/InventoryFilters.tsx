@@ -4,6 +4,7 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react'
 import type { ConditionFilter, RvCategory, SortOption } from '@/lib/inventory'
+import { PRICE_BANDS, LENGTH_BANDS, findActiveBand, type Band } from '@/lib/inventory-filters'
 
 interface Props {
   condition: ConditionFilter
@@ -15,9 +16,19 @@ interface Props {
   categories: string[]
   brands: string[]
   label?: string
+  /** Extra filter dimensions — all optional, parsed from URL params (priceMin/priceMax/lengthMin/lengthMax) by the page. */
+  priceMin?: number
+  priceMax?: number
+  lengthMin?: number
+  lengthMax?: number
+  /** Set false to hide the length band filter (e.g. for a category with no lengthFt data). */
+  showLengthFilter?: boolean
 }
 
-export function InventoryFilters({ condition, category, sort, brand, totalCount, filteredCount, categories, brands, label = 'units' }: Props) {
+export function InventoryFilters({
+  condition, category, sort, brand, totalCount, filteredCount, categories, brands, label = 'units',
+  priceMin, priceMax, lengthMin, lengthMax, showLengthFilter = true,
+}: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const params = useSearchParams()
@@ -32,6 +43,17 @@ export function InventoryFilters({ condition, category, sort, brand, totalCount,
     }
     startTransition(() => { router.push(`${pathname}?${next.toString()}`) })
   }
+
+  /** Sets/clears a paired min/max URL param (price + length bands) — instant, no Apply button, no reload. */
+  function updateRange(minKey: string, maxKey: string, band: Band) {
+    const next = new URLSearchParams(params.toString())
+    if (band.min == null) next.delete(minKey); else next.set(minKey, String(band.min))
+    if (band.max == null) next.delete(maxKey); else next.set(maxKey, String(band.max))
+    startTransition(() => { router.push(`${pathname}?${next.toString()}`) })
+  }
+
+  const activePriceBand = findActiveBand(PRICE_BANDS, priceMin, priceMax)
+  const activeLengthBand = findActiveBand(LENGTH_BANDS, lengthMin, lengthMax)
 
   const chipBase: React.CSSProperties = {
     padding: '0.375rem 0.875rem',
@@ -119,12 +141,46 @@ export function InventoryFilters({ condition, category, sort, brand, totalCount,
 
       {/* Brand chips */}
       {brands.length > 1 && (
-        <div>
+        <div style={{ marginBottom: '0.75rem' }}>
           <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Brand</p>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {BRANDS.map(b => (
               <button key={b} style={b === brand ? chipActive : chipInactive} onClick={() => update('brand', b)}>
                 {b}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Price range chips */}
+      <div style={{ marginBottom: showLengthFilter ? '0.75rem' : 0 }}>
+        <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Price</p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {PRICE_BANDS.map(band => (
+            <button
+              key={band.label}
+              style={band.label === activePriceBand.label ? chipActive : chipInactive}
+              onClick={() => updateRange('priceMin', 'priceMax', band)}
+            >
+              {band.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Length range chips */}
+      {showLengthFilter && (
+        <div>
+          <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Length</p>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            {LENGTH_BANDS.map(band => (
+              <button
+                key={band.label}
+                style={band.label === activeLengthBand.label ? chipActive : chipInactive}
+                onClick={() => updateRange('lengthMin', 'lengthMax', band)}
+              >
+                {band.label}
               </button>
             ))}
           </div>

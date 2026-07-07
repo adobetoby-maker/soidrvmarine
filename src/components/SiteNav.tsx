@@ -3,21 +3,51 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X, Phone } from 'lucide-react'
+import { Menu, X, Phone, ChevronDown } from 'lucide-react'
 import { DEALER_INFO } from '@/lib/types'
 
-const navLinks = [
-  { label: 'RVs', href: '/rvs' },
-  { label: 'Boats', href: '/boats' },
-  { label: 'Mercury Outboards', href: '/motors/mercury-outboards' },
-  { label: 'About', href: '/about' },
-  { label: 'Financing', href: '/financing' },
-  { label: 'Contact', href: '/contact' },
+interface NavGroup {
+  label: string
+  links: { label: string; href: string }[]
+}
+
+const navGroups: NavGroup[] = [
+  {
+    label: 'Inventory',
+    links: [
+      { label: 'RVs', href: '/rvs' },
+      { label: 'Boats', href: '/boats' },
+      { label: 'Powersports', href: '/powersports' },
+      { label: 'Mercury Outboards', href: '/motors/mercury-outboards' },
+      { label: 'Trade-In Value', href: '/trade-in' },
+    ],
+  },
+  {
+    label: 'Services',
+    links: [
+      { label: 'Financing', href: '/financing' },
+      { label: 'Apply for Financing', href: '/financing/apply' },
+      { label: 'Parts Request', href: '/parts' },
+      { label: 'Service Request', href: '/service' },
+      { label: 'RV &amp; Boat Storage', href: '/storage' },
+    ],
+  },
+  {
+    label: 'Company',
+    links: [
+      { label: 'About Us', href: '/about' },
+      { label: 'Careers', href: '/careers' },
+      { label: 'Locations &amp; Hours', href: '/locations' },
+      { label: 'Idaho Parks &amp; Rec', href: '/parks-rec' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
 ]
 
 export function SiteNav() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [openGroup, setOpenGroup] = useState<string | null>(null)
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 16)
@@ -81,28 +111,79 @@ export function SiteNav() {
 
           {/* Desktop nav — display toggled via CSS class, not inline style */}
           <nav
-            style={{ alignItems: 'center', gap: '0.25rem' }}
+            style={{ alignItems: 'center', gap: '0.125rem', position: 'relative' }}
             className="desktop-nav"
             aria-label="Main navigation"
           >
-            {navLinks.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                style={{
-                  padding: '0.375rem 0.75rem',
-                  fontSize: '0.875rem',
-                  fontWeight: 500,
-                  color: 'var(--color-navy)',
-                  borderRadius: 6,
-                  textDecoration: 'none',
-                  transition: 'background 150ms ease-out',
-                }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(28, 43, 56, 0.06)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            {navGroups.map(group => (
+              <div
+                key={group.label}
+                style={{ position: 'relative' }}
+                onMouseEnter={() => setOpenGroup(group.label)}
+                onMouseLeave={() => setOpenGroup(null)}
               >
-                {link.label}
-              </Link>
+                <button
+                  type="button"
+                  aria-haspopup="true"
+                  aria-expanded={openGroup === group.label}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    padding: '0.375rem 0.75rem',
+                    fontSize: '0.875rem',
+                    fontWeight: 500,
+                    color: 'var(--color-navy)',
+                    borderRadius: 6,
+                    background: openGroup === group.label ? 'rgba(28, 43, 56, 0.06)' : 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  {group.label}
+                  <ChevronDown size={13} strokeWidth={2.5} />
+                </button>
+
+                {openGroup === group.label && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      minWidth: 200,
+                      background: 'var(--color-parchment)',
+                      border: '1px solid var(--color-parchment-dark)',
+                      borderRadius: 10,
+                      boxShadow: '0 8px 24px rgba(28,43,56,0.14)',
+                      padding: '0.5rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 2,
+                      zIndex: 60,
+                    }}
+                  >
+                    {group.links.map(link => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        style={{
+                          padding: '0.5rem 0.75rem',
+                          fontSize: '0.875rem',
+                          fontWeight: 500,
+                          color: 'var(--color-navy)',
+                          borderRadius: 6,
+                          textDecoration: 'none',
+                          transition: 'background 150ms ease-out',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(28, 43, 56, 0.06)')}
+                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                        dangerouslySetInnerHTML={{ __html: link.label }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -165,26 +246,39 @@ export function SiteNav() {
               padding: '1rem 0',
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.25rem',
+              gap: '1.25rem',
+              maxHeight: 'calc(100vh - 64px)',
+              overflowY: 'auto',
             }}
             aria-label="Mobile navigation"
           >
-            {navLinks.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                style={{
-                  padding: '0.625rem 0.75rem',
-                  fontSize: '1rem',
-                  fontWeight: 500,
-                  color: 'var(--color-navy)',
-                  borderRadius: 6,
-                  textDecoration: 'none',
-                }}
-              >
-                {link.label}
-              </Link>
+            {navGroups.map(group => (
+              <div key={group.label}>
+                <p style={{
+                  fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.08em',
+                  textTransform: 'uppercase', color: 'var(--color-sage)', padding: '0 0.75rem', marginBottom: '0.375rem',
+                }}>
+                  {group.label}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  {group.links.map(link => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      style={{
+                        padding: '0.625rem 0.75rem',
+                        fontSize: '1rem',
+                        fontWeight: 500,
+                        color: 'var(--color-navy)',
+                        borderRadius: 6,
+                        textDecoration: 'none',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: link.label }}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
         )}

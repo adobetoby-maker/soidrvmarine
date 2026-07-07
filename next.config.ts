@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
       { source: '/mercury-dealer-magic-valley', destination: '/motors/mercury-outboards', permanent: false },
       { source: '/rv-dealer-burley-id', destination: '/rvs', permanent: false },
       { source: '/rv-dealer-boise-id', destination: '/rvs', permanent: false },
-      { source: '/service', destination: '/contact', permanent: false },
-      { source: '/parts', destination: '/contact', permanent: false },
     ]
   },
 }

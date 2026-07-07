@@ -29,7 +29,9 @@ export default function PrivacyPage() {
         },
         {
           title: 'Cookies',
-          body: `Our website uses cookies for basic analytics (Google Analytics 4). These cookies collect anonymized data about site usage. You may disable cookies in your browser settings. We do not use advertising or tracking cookies beyond standard GA4.`,
+          body: process.env.NEXT_PUBLIC_GA4_ID
+            ? `Our website uses cookies for basic analytics (Google Analytics 4). These cookies collect anonymized data about site usage. You may disable cookies in your browser settings. We do not use advertising or tracking cookies beyond standard GA4.`
+            : `Our website does not currently run any analytics or tracking cookies. If that changes, this policy will be updated to describe what is collected and why.`,
         },
         {
           title: 'Data Retention',

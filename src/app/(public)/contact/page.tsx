@@ -156,28 +156,29 @@ export default async function ContactPage({ searchParams }: Props) {
         </div>
       </div>
 
-      {/* Map embed placeholder */}
+      {/* Map embed — real Google Maps iframe, no API key required */}
       <div style={{ background: 'var(--color-parchment-dark)', padding: '0 1.5rem 3rem' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid var(--color-parchment-dark)', height: 320, background: 'var(--color-navy)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            <div style={{ textAlign: 'center' }}>
-              <p style={{ fontFamily: 'var(--font-display)', fontSize: '1.125rem', fontWeight: 700, color: 'white', marginBottom: '0.375rem' }}>
-                60 Bob Barton Road, Jerome, ID 83338
-              </p>
-              <p style={{ fontSize: '0.8125rem', color: 'oklch(72% 0.01 220)', marginBottom: '1rem' }}>
-                {/* [DEMO] replace this block with a real Google Maps embed iframe */}
-                Off US-93, south of Jerome — easy access from Twin Falls
-              </p>
-              <a
-                href={DEALER_INFO.directionsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.625rem 1.25rem', background: 'var(--color-amber)', color: 'white', fontWeight: 700, borderRadius: 8, textDecoration: 'none', fontSize: '0.875rem' }}
-              >
-                Open in Google Maps
-              </a>
-            </div>
+          <div style={{ borderRadius: 16, overflow: 'hidden', border: '1px solid var(--color-parchment-dark)', height: 320, position: 'relative' }}>
+            <iframe
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`${DEALER_INFO.address}, ${DEALER_INFO.city}, ${DEALER_INFO.state} ${DEALER_INFO.zip}`)}&output=embed`}
+              width="100%"
+              height="100%"
+              style={{ border: 0, display: 'block' }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title={`Map to ${DEALER_INFO.name} — ${DEALER_INFO.address}, ${DEALER_INFO.city}, ${DEALER_INFO.state}`}
+            />
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <a
+              href={DEALER_INFO.directionsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-amber)', fontWeight: 600, textDecoration: 'none', fontSize: '0.875rem' }}
+            >
+              Open in Google Maps
+            </a>
           </div>
         </div>
       </div>

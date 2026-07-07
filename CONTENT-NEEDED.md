@@ -1,6 +1,6 @@
 # Content Needed — Southern Idaho RV & Marine
-Generated: 2026-07-05
-Status: Live at https://soidrvmarine.worker-bee.app
+Generated: 2026-07-05 · Updated: 2026-07-07 (gap-closing build)
+Status: Live at https://soidrvmarine.worker-bee.app · Inventory now 67 units (49 RV / 18 boat) matching the dealer's own "1–30 of 67" count
 
 ## Priority 1 — Replace Before Full Launch
 
@@ -17,6 +17,17 @@ Status: Live at https://soidrvmarine.worker-bee.app
 - [ ] **rv008 trim code** — we matched "Passport 253RD" to the dealer's current "Passport 253RDWE" listing (same price, $34,250) — confirm this is the same floorplan, just a fuller trim code.
 - [ ] **rv015 model year** — our data said "2020 CrossRoads Cruiser 22BBH" but the dealer's current lot only has a 2022 of the same floorplan/price ($21,750). Photo now shown is the 2022 unit. Confirm the actual unit on the lot is 2022, or correct the model year in the DB.
 - [ ] **GA4 measurement ID** — `.env.local` has `NEXT_PUBLIC_GA4_ID=G-XXXXXXXXXX` placeholder. Needs a real property ID.
+
+## Priority 2 — New Pages Awaiting Dealer Confirmation (gap-closing build, 2026-07-07)
+
+These pages are live with plausible, clearly-labeled values shown to the dealer for confirmation — nothing is passed off as final. Each carries a `[DEMO]` code comment at the exact line.
+
+- [ ] **Storage rate** (`/storage`) — monthly outdoor storage price shown is last-audit advertised rate. Confirm current per-unit monthly rate.
+- [ ] **Parts & Service department hours** (`/locations`) — shown at parity with Sales hours (Mon–Fri 9–6 · Sat 9–5). Confirm actual department hours; they often differ from Sales.
+- [ ] **Return policy** (`/returns`) — return window and restocking-fee percentage are placeholders. Confirm exact terms before this page is treated as binding.
+- [ ] **Idaho Parks & Rec fees** (`/parks-rec`) — state-set registration/sticker fees shown; subject to change by the State of Idaho. Verify current amounts before quoting a customer.
+- [ ] **Powersports stock** (`/powersports`) — real nav category on the live site but returned zero live units on every filtered URL during the scrape. Page renders an honest empty/"call for availability" state. Send current powersports inventory (or DeskManager will populate it once syncing).
+- [ ] **Resend sending domain** — lead forms (`/api/lead`: parts, service, careers, financing, trade-in, storage, contact) send via Resend. Confirm the verified sending domain / `RESEND_API_KEY` in Coolify env so submissions deliver to the dealer's real inbox.
 
 ## Priority 3 — Nice to Have
 

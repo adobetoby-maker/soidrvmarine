@@ -24,6 +24,8 @@ export const metadata: Metadata = {
   },
 }
 
+export const revalidate = 600
+
 const KNOWN_CATEGORIES = ['Travel Trailer', 'Fifth Wheel', 'Class A', 'Class B', 'Class C', 'Toy Hauler']
 
 interface Props {
