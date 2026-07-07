@@ -1,18 +1,21 @@
-| Spec item            | Observed                          | Result |
-|---|---|---|
-| Layout / spacing     | Home hero, dropdown nav (Inventory/Services/Company), footer (5 columns: Brand/Inventory/Services/Company/Legal+Connect), financing page CTA row, and unit-detail spec+calculator stack all render with consistent spacing and no overlap at 1440px. Screenshots read directly with the Read tool at each step. | PASS |
-| Colors / contrast    | Navy (`--color-navy`) hero/footer, amber (`--color-amber`) CTAs, parchment body sections all intact and unchanged from the pre-integration design. Serif `--font-display` used for all headings including new dropdown/footer/CTA labels. | PASS |
-| Typography           | New page/nav/footer labels use existing type scale (0.6875rem uppercase eyebrow, serif display headings, 0.875rem body) — no new fonts introduced. | PASS |
-| Mobile (375–390px)   | Mobile hamburger menu opens a scrollable accordion with Inventory/Services/Company groups, all links present, "Call Us" CTA intact. Screenshot taken at 390×844 and read. | PASS |
-| Animations / motion  | Hero swapped from static `<img>` to `<HeroVideo>` — autoplay/muted/loop video with graceful fallback to `/hero-poster.jpg` (confirmed live: hero-loop.mp4 does not exist yet, poster displays with zero layout shift, zero broken-image icon) and `prefers-reduced-motion` handling via a small client wrapper. | PASS |
-| Nav dropdowns        | Desktop hover-triggered dropdowns (Inventory/Services/Company) open/close correctly, each with unique keys (fixed a pre-existing duplicate-React-key bug in the footer's Inventory column: 4 links pointing to `/rvs` and 2 to `/boats` shared `href` as key — now keyed on unique `label`). Confirmed via dev console: "Encountered two children with the same key" warnings present before the fix, gone after. | PASS |
-| Payment calculator   | Mounted on unit-detail page (`/inventory/[slug]`), prefilled with the unit's real price ($25,250 → $2,525 down → $275/mo at 7.9% / 120mo, verified against standard amortization math). Compact mode matches page density. | PASS |
-| Contact map          | `[DEMO]` placeholder replaced with a real embedded Google Maps iframe (no API key required, `output=embed` query form) built from `DEALER_INFO` address fields — confirmed the correct pin location (Bob Barton Rd, Jerome) renders live. | PASS |
-| Financing CTA        | "Apply / Get Pre-Qualified" added as the primary (amber) CTA in both the hero button row and the bottom "Ready to Apply?" section, linking to `/financing/apply`. | PASS |
-| Dead links           | `grep -rn 'rv-dealer-\|boat-dealer-\|mercury-dealer-' src` → zero matches. Old geo-SEO slugs now 307-redirect (via `next.config.ts`, pre-existing) to real routes (`/rvs`, `/boats`, `/motors/mercury-outboards`) rather than 404ing, preserving any external inbound links. | PASS |
-| Route completeness   | All new + existing public routes curl-tested locally → 200 (including `/parts` and `/service`, which were being silently 307-redirected to `/contact` by two stale entries in `next.config.ts` left over from before those pages existed — removed). | PASS |
-| Featured-unit links  | Found and fixed 4 mismatched slugs in the home page's `FEATURED` array (e.g. `...-travel-trailer-rv003` vs the real `...-rv003`) that made every homepage "Featured Inventory" card 404 on click. All 4 now curl-test 200 and match `src/lib/inventory.ts`. | PASS |
-| tsc                  | `npx tsc --noEmit` → zero output. | PASS |
-| Build                | `npm run build` → compiled successfully, all static pages + 27 unit detail pages generated, zero errors. | PASS |
+# Verify — soidrvmarine gap-closing deploy (2026-07-07)
 
-No FAIL rows. Two real, pre-existing functional bugs were found and fixed during this integration pass (outside the original file list but blocking the PRD's own "every route returns 200" / "no dead links" acceptance criteria): the `/parts` + `/service` next.config.ts redirects, and the 4 mismatched Featured Inventory slugs on the home page.
+Live: https://soidrvmarine.worker-bee.app · Coolify deploy ydiws6eki72sm9z9tf0j1qzj (finished) · all routes HTTP 200
+
+| Spec item | Observed | Result |
+|---|---|---|
+| Inventory reseed (67 units) | Live DB reseeded 29→67 units via Supabase Mgmt API under BLAST-RADIUS receipt (backup saved). `/rvs` renders "Showing all 49 RVs", 49 unique detail links; `/boats` 18. Build generates 67 SSG detail pages. | PASS |
+| Home hero video | Desktop scroll video (eyes-desktop.webm, 56 frames): frame_006 shows Snake River Canyon golden-hour hero fully rendered with boat on water + reflections. hero-loop.mp4 serves 200 live. ~1.5s empty-cream flash on first uncached load (frames 1–3) before poster/video paints — noted, non-blocking. | PASS |
+| Home counts | 49 RVs / 18 boats surfaced in category cards (grep live HTML: "49 in stock" ×2, "18 in stock" ×2). Matches inventory.ts + live DB. | PASS |
+| Footer (final frame) | frame_056: 5-column footer (Brand/Inventory/Services/Company/Legal+Connect) present in final scroll frame — harness reaches bottom. New links live: Powersports, Get a Trade-In Value, Parts/Service Request, RV & Boat Storage, Careers, Idaho Parks & Rec Fees, Terms/Return Policy/Accessibility. "Ready to find your next adventure?" CTA above. No overlap. | PASS |
+| Mobile (390px) | eyes-mobile.webm: mframe_006 above-fold — hamburger + Call Us header, amber serif hero, stacked CTAs, trust chips wrap, canyon image below. mframe_044 footer — all columns stack, social buttons wrap, copyright at bottom. Single-column, no overflow. | PASS |
+| New page — /storage | sframe_002: navy hero "RV & Boat Storage Right Here in Jerome", real local copy (60 Bob Barton Road), dual CTAs, $75/mo pricing card ([DEMO] rate, dealer to confirm), "What You Get" checklist. Brand-consistent. | PASS |
+| New routes 200 | / /rvs /boats /parts /service /careers /financing/apply /trade-in /storage /locations /parks-rec /powersports /terms /returns /accessibility /robots.txt /sitemap.xml all 200. /api/lead 405 on GET (correct — POST-only). | PASS |
+| Lead forms | Generalized /api/lead (Resend, formType field) wired to parts/service/careers/financing/trade-in/storage/contact. Resend sending domain listed in CONTENT-NEEDED for dealer. | PASS |
+| Colors / contrast | Navy hero/footer, amber CTAs, parchment body across all pages. Serif display headings. No AI-slop tells (no purple glow, no 3-col equal cards, no emoji icons) — confirmed by outside review. | PASS |
+| tsc / build | `npx tsc --noEmit` zero output. `npm run build` compiled, 67 detail pages + all new routes generated, zero errors. | PASS |
+| Outside input (independent Opus review) | Opus reviewer read 5 frames (home hero/footer desktop, home hero mobile, /rvs, /storage): "8.3/10, SHIP. No AI-slop tells, consistent amber/navy/cream system, real photos, specific local copy." Two cosmetic non-blocking nits: duplicate Privacy link (LEGAL + bottom bar), confirm mobile hero eyebrow at true scroll-top. | PASS |
+
+Beauty: 8.3 (outside-review) / self ~8.4 — both ≥ 7.5 bar. No FAIL rows.
+
+Follow-ups (non-blocking, logged): (1) hero poster paint on first load ~1.5s flash; (2) dedupe footer Privacy link. Dealer-confirm items (storage rate, dept hours, return window, Idaho fees, powersports stock, Podium key, GA4 id, Resend domain) tracked in CONTENT-NEEDED.md.
