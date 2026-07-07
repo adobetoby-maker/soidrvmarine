@@ -44,7 +44,6 @@ export function HeroVideo({ poster, videoSrc, alt }: Props) {
     <video
       autoPlay
       muted
-      loop
       playsInline
       poster={poster}
       preload="auto"

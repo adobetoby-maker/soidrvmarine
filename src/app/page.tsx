@@ -85,12 +85,27 @@ const TRUST_ITEMS = [
 ]
 
 function StarRow({ score, count }: { score: number; count: number }) {
+  const full = Math.floor(score)
+  const frac = score - full // e.g. 4.7 → 0.7 fill on the 5th star
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      {[1, 2, 3, 4, 5].map(i => (
-        <Star key={i} size={16} fill={i <= score ? 'var(--color-amber)' : 'none'}
-          color="var(--color-amber)" />
-      ))}
+      {[1, 2, 3, 4, 5].map(i => {
+        if (i <= full) {
+          return <Star key={i} size={16} fill="var(--color-amber)" color="var(--color-amber)" />
+        }
+        if (i === full + 1 && frac > 0) {
+          // Partial star: empty outline with a filled star clipped to `frac` width on top.
+          return (
+            <span key={i} style={{ position: 'relative', display: 'inline-flex', width: 16, height: 16 }}>
+              <Star size={16} fill="none" color="var(--color-amber)" style={{ position: 'absolute', inset: 0 }} />
+              <span style={{ position: 'absolute', inset: 0, width: `${frac * 100}%`, overflow: 'hidden' }} aria-hidden>
+                <Star size={16} fill="var(--color-amber)" color="var(--color-amber)" />
+              </span>
+            </span>
+          )
+        }
+        return <Star key={i} size={16} fill="none" color="var(--color-amber)" />
+      })}
       <span style={{ fontSize: '0.875rem', color: 'var(--color-ink-light)', marginLeft: 4 }}>
         {score.toFixed(1)} ({count.toLocaleString()} reviews)
       </span>
