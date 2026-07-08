@@ -165,3 +165,26 @@ img {
 /* Shop-by-Payment tiles hover (home is a server component) */
 .pay-tier:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(28,43,56,0.18); }
 .brand-chip:hover { border-color: var(--color-navy); background: var(--color-navy); color: #fff; }
+
+/* ── Demo color themes (site-wide switcher) ─────────────────────────────── */
+:root[data-palette="bretz"] {
+  --color-navy: #14257a; --color-navy-900: #0f1d64; --color-navy-950: #0a1548;
+  --color-amber: #c99a2e; --color-amber-light: #f7d449; --color-amber-dark: #b0851f;
+  --color-parchment: #eef1f8; --color-parchment-dark: #dbe2f0;
+  --color-ocean: #14257a; --color-ocean-light: #2a3a8f;
+  --color-sage: #5a6a90; --color-ink-light: #33436e;
+}
+:root[data-palette="marine"] {
+  --color-navy: #10394a; --color-navy-900: #0b2a37; --color-navy-950: #071e28;
+  --color-amber: #e08a2e; --color-amber-light: #f0a854; --color-amber-dark: #c2761f;
+  --color-parchment: #eef3f3; --color-parchment-dark: #dbe6e6;
+  --color-ocean: #1f6f8b; --color-ocean-light: #2f89a8;
+  --color-sage: #5a7076; --color-ink-light: #325058;
+}
+:root[data-palette="sand"] {
+  --color-navy: #33291f; --color-navy-900: #271f17; --color-navy-950: #1b150f;
+  --color-amber: #bf6f36; --color-amber-light: #d68f56; --color-amber-dark: #a25b28;
+  --color-parchment: #f4ecdd; --color-parchment-dark: #e6dac3;
+  --color-ocean: #7a5c3a; --color-ocean-light: #967144;
+  --color-sage: #8a7a63; --color-ink-light: #5a4d3c;
+}

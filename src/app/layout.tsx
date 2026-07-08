@@ -37,6 +37,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
       </head>
       <body className="min-h-full flex flex-col antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try{var p=localStorage.getItem('soid-palette');if(p&&p!=='default')document.documentElement.setAttribute('data-palette',p)}catch(e){}",
+          }}
+        />
         {children}
         {/* Podium webchat — add NEXT_PUBLIC_PODIUM_API_KEY to .env.local to activate */}
         {process.env.NEXT_PUBLIC_PODIUM_API_KEY && (

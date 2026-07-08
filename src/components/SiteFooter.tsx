@@ -118,6 +118,7 @@ export function SiteFooter() {
               ['Careers', '/careers'],
               ['Locations &amp; Hours', '/locations'],
               ['Idaho Parks &amp; Rec Fees', '/parks-rec'],
+              ['How It Works', '/how-it-works'],
               ['Buying Guides', '/guides'],
               ['Contact', '/contact'],
             ].map(([label, href]) => (

@@ -37,6 +37,7 @@ const navGroups: NavGroup[] = [
     label: 'Company',
     links: [
       { label: 'About Us', href: '/about' },
+      { label: 'How It Works', href: '/how-it-works' },
       { label: 'Buying Guides', href: '/guides' },
       { label: 'Careers', href: '/careers' },
       { label: 'Locations &amp; Hours', href: '/locations' },

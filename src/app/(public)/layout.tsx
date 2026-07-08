@@ -2,6 +2,7 @@
 import { SiteNav } from '@/components/SiteNav'
 import { SiteFooter } from '@/components/SiteFooter'
 import { CompareBar } from '@/components/inventory/CompareBar'
+import { ThemeSwitcher } from '@/components/ThemeSwitcher'
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
       <main style={{ flex: 1 }}>{children}</main>
       <CompareBar />
       <SiteFooter />
+      <ThemeSwitcher />
     </>
   )
 }
