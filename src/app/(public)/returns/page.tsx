@@ -59,7 +59,7 @@ export default function ReturnsPage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
           {POLICY_POINTS.map(p => (
             <div key={p.title} style={{ display: 'flex', gap: '0.875rem', alignItems: 'flex-start' }}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-pine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ocean)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 3 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
               <div>
                 <p style={{ fontWeight: 700, color: 'var(--color-navy)', fontSize: '1rem', marginBottom: '0.25rem' }}>{p.title}</p>
                 <p style={{ fontSize: '0.9375rem', color: 'var(--color-sage)', lineHeight: 1.65 }}>{p.desc}</p>

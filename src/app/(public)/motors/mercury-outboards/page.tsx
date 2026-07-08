@@ -129,7 +129,7 @@ export default function MercuryOutboardsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {SERVICES.map(s => (
               <div key={s.label} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-pine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ocean)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
                 <div>
                   <p style={{ fontWeight: 600, color: 'var(--color-navy)', fontSize: '0.875rem', marginBottom: '0.25rem' }}>{s.label}</p>
                   <p style={{ fontSize: '0.8125rem', color: 'var(--color-sage)', lineHeight: 1.55 }}>{s.desc}</p>

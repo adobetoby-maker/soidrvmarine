@@ -46,7 +46,7 @@ function FeeTable({ title, note, rows }: { title: string; note: string; rows: { 
         {rows.map(row => (
           <div key={row.item} style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'baseline', padding: '0.75rem 0', borderBottom: '1px solid var(--color-parchment-dark)' }}>
             <span style={{ fontSize: '0.875rem', color: 'var(--color-navy)', lineHeight: 1.4 }}>{row.item}</span>
-            <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-pine)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{row.fee}</span>
+            <span style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'var(--color-ocean)', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }}>{row.fee}</span>
           </div>
         ))}
       </div>

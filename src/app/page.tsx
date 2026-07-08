@@ -448,7 +448,7 @@ export default function HomePage() {
 
         {/* ── Mercury Exclusive ── */}
         <section style={{
-          background: 'var(--color-pine)',
+          background: 'var(--color-ocean)',
           padding: '5rem 1.5rem',
           position: 'relative',
           overflow: 'hidden',

@@ -19,7 +19,7 @@ export interface UnitCardProps {
 }
 
 export function UnitCard({ year, make, model, type, condition, price, photo, slug, callForPrice, compact }: UnitCardProps) {
-  const conditionColor = condition === 'New' ? 'var(--color-pine)' : 'var(--color-navy)'
+  const conditionColor = condition === 'New' ? 'var(--color-ocean)' : 'var(--color-navy)'
 
   return (
     <Link
@@ -57,7 +57,7 @@ export function UnitCard({ year, make, model, type, condition, price, photo, slu
           <div style={{
             width: '100%', height: '100%',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'linear-gradient(135deg, var(--color-navy) 0%, var(--color-pine) 100%)',
+            background: 'linear-gradient(135deg, var(--color-navy) 0%, var(--color-ocean) 100%)',
             color: 'oklch(60% 0.012 220)',
             fontSize: '0.75rem',
             letterSpacing: '0.08em',

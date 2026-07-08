@@ -84,7 +84,7 @@ export default function StoragePage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.125rem' }}>
               {INCLUDED.map(item => (
                 <div key={item.title} style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-pine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-ocean)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden><polyline points="20 6 9 17 4 12"/></svg>
                   <div>
                     <p style={{ fontWeight: 600, color: 'var(--color-navy)', fontSize: '0.9375rem', marginBottom: '0.25rem' }}>{item.title}</p>
                     <p style={{ fontSize: '0.8125rem', color: 'var(--color-sage)', lineHeight: 1.55 }}>{item.desc}</p>

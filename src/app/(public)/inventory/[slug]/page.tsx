@@ -55,7 +55,7 @@ export default async function UnitDetailPage(
   const backHref = isRv ? '/rvs' : '/boats'
   const backLabel = isRv ? 'RVs' : 'Boats'
 
-  const conditionColor = unit.condition === 'New' ? 'var(--color-pine)' : 'var(--color-navy)'
+  const conditionColor = unit.condition === 'New' ? 'var(--color-ocean)' : 'var(--color-navy)'
   const title = `${unit.year} ${unit.make} ${unit.model}${unit.trim ? ` ${unit.trim}` : ''}`
 
   const specs: { label: string; value: string }[] = [
@@ -259,7 +259,7 @@ export default async function UnitDetailPage(
                   'Veteran-owned dealership',
                 ].map(t => (
                   <div key={t} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', fontSize: '0.8125rem', color: 'var(--color-sage)' }}>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-pine)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-ocean)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"/>
                     </svg>
                     {t}
