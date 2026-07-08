@@ -167,24 +167,26 @@ img {
 .brand-chip:hover { border-color: var(--color-navy); background: var(--color-navy); color: #fff; }
 
 /* ── Demo color themes (site-wide switcher) ─────────────────────────────── */
+/* Each token's LIGHTNESS matches the default palette's, so contrast behaves
+   the same as the shipped (accepted) theme — only the hue changes. */
 :root[data-palette="bretz"] {
-  --color-navy: #14257a; --color-navy-900: #0f1d64; --color-navy-950: #0a1548;
-  --color-amber: #c99a2e; --color-amber-light: #f7d449; --color-amber-dark: #b0851f;
-  --color-parchment: #eef1f8; --color-parchment-dark: #dbe2f0;
-  --color-ocean: #14257a; --color-ocean-light: #2a3a8f;
-  --color-sage: #5a6a90; --color-ink-light: #33436e;
+  --color-navy: oklch(28% 0.14 264); --color-navy-900: oklch(20% 0.12 264); --color-navy-950: oklch(14% 0.10 264);
+  --color-amber: oklch(60.8% 0.115 88); --color-amber-light: oklch(85% 0.155 98); --color-amber-dark: oklch(66% 0.12 88);
+  --color-parchment: oklch(95.5% 0.012 255); --color-parchment-dark: oklch(91% 0.02 258);
+  --color-ocean: oklch(30% 0.12 264); --color-ocean-light: oklch(42% 0.13 264);
+  --color-sage: oklch(54% 0.035 262); --color-ink-light: oklch(52% 0.03 262);
 }
 :root[data-palette="marine"] {
-  --color-navy: #10394a; --color-navy-900: #0b2a37; --color-navy-950: #071e28;
-  --color-amber: #e08a2e; --color-amber-light: #f0a854; --color-amber-dark: #c2761f;
-  --color-parchment: #eef3f3; --color-parchment-dark: #dbe6e6;
-  --color-ocean: #1f6f8b; --color-ocean-light: #2f89a8;
-  --color-sage: #5a7076; --color-ink-light: #325058;
+  --color-navy: oklch(29% 0.055 218); --color-navy-900: oklch(21% 0.05 218); --color-navy-950: oklch(15% 0.04 218);
+  --color-amber: oklch(61% 0.125 55); --color-amber-light: oklch(74% 0.12 58); --color-amber-dark: oklch(66% 0.12 55);
+  --color-parchment: oklch(95% 0.009 200); --color-parchment-dark: oklch(90.5% 0.014 200);
+  --color-ocean: oklch(40% 0.08 220); --color-ocean-light: oklch(50% 0.09 220);
+  --color-sage: oklch(53% 0.025 210); --color-ink-light: oklch(52% 0.02 212);
 }
 :root[data-palette="sand"] {
-  --color-navy: #33291f; --color-navy-900: #271f17; --color-navy-950: #1b150f;
-  --color-amber: #bf6f36; --color-amber-light: #d68f56; --color-amber-dark: #a25b28;
-  --color-parchment: #f4ecdd; --color-parchment-dark: #e6dac3;
-  --color-ocean: #7a5c3a; --color-ocean-light: #967144;
-  --color-sage: #8a7a63; --color-ink-light: #5a4d3c;
+  --color-navy: oklch(29% 0.03 60); --color-navy-900: oklch(21% 0.025 55); --color-navy-950: oklch(15% 0.02 50);
+  --color-amber: oklch(58% 0.11 45); --color-amber-light: oklch(72% 0.10 50); --color-amber-dark: oklch(63% 0.11 45);
+  --color-parchment: oklch(93.5% 0.02 75); --color-parchment-dark: oklch(88% 0.03 72);
+  --color-ocean: oklch(38% 0.05 60); --color-ocean-light: oklch(48% 0.06 58);
+  --color-sage: oklch(50% 0.025 65); --color-ink-light: oklch(49% 0.02 62);
 }
