@@ -37,3 +37,12 @@ These pages are live with plausible, clearly-labeled values shown to the dealer 
 ## How to Send Content
 
 Reply with photos, a real Podium API key, or corrections to the items above, and they'll be swapped in the same day.
+
+## Priority 2 — Bretz-gap items awaiting dealer input (2026-07-08)
+
+Built where honest; these need the dealer's real facts before they go on the site:
+- [ ] **Financing offers** — Bretz advertises "over 16 lenders" and "90 days no payment (OAC)". We show a generic multi-lender line. Confirm the real lender count and whether a no-payment promo is actually offered before we state numbers.
+- [ ] **Priority RV Network (or similar)** — Bretz touts 198 reciprocal service locations. This is a paid membership, not a web feature. Join if desired, then we add the badge.
+- [ ] **Per-unit walk-around videos** — Bretz films each unit. Needs footage from the dealer (phone video is fine); we'll wire a video slot on the detail page.
+- [ ] **Deal of the Week / clearance** — needs real sale pricing or a flagged unit each week to feature honestly (we won't invent discounts).
+- [ ] **Body shop** — add a page only if the dealer offers collision/body work.
