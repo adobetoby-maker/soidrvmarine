@@ -74,6 +74,7 @@ export function SiteFooter() {
               ['Powersports', '/powersports'],
               ['Mercury Outboards', '/motors/mercury-outboards'],
               ['Get a Trade-In Value', '/trade-in'],
+              ['Sell / Trade / Consign', '/sell'],
             ].map(([label, href]) => (
               <Link key={label} href={href} style={{ fontSize: '0.875rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}
                 onMouseEnter={e => (e.currentTarget.style.color = 'white')}
@@ -117,6 +118,7 @@ export function SiteFooter() {
               ['Careers', '/careers'],
               ['Locations &amp; Hours', '/locations'],
               ['Idaho Parks &amp; Rec Fees', '/parks-rec'],
+              ['Buying Guides', '/guides'],
               ['Contact', '/contact'],
             ].map(([label, href]) => (
               <Link key={href} href={href} style={{ fontSize: '0.875rem', color: 'oklch(80% 0.012 220)', textDecoration: 'none', transition: 'color 150ms' }}

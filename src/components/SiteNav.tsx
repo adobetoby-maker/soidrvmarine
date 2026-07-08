@@ -19,7 +19,8 @@ const navGroups: NavGroup[] = [
       { label: 'Boats', href: '/boats' },
       { label: 'Powersports', href: '/powersports' },
       { label: 'Mercury Outboards', href: '/motors/mercury-outboards' },
-      { label: 'Trade-In Value', href: '/trade-in' },
+      { label: 'Sell / Trade / Consign', href: '/sell' },
+      { label: 'Saved Units', href: '/saved' },
     ],
   },
   {
@@ -36,6 +37,7 @@ const navGroups: NavGroup[] = [
     label: 'Company',
     links: [
       { label: 'About Us', href: '/about' },
+      { label: 'Buying Guides', href: '/guides' },
       { label: 'Careers', href: '/careers' },
       { label: 'Locations &amp; Hours', href: '/locations' },
       { label: 'Idaho Parks &amp; Rec', href: '/parks-rec' },

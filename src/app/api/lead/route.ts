@@ -5,7 +5,7 @@ import { Resend } from 'resend'
 import { NextResponse } from 'next/server'
 import { DEALER_INFO } from '@/lib/types'
 
-type FormType = 'contact' | 'parts' | 'service' | 'financing' | 'careers' | 'trade-in' | 'general'
+type FormType = 'contact' | 'parts' | 'service' | 'financing' | 'careers' | 'trade-in' | 'consign' | 'sell' | 'general'
 
 const SUBJECT_LABELS: Record<FormType, string> = {
   contact: 'Website Contact Form',
@@ -14,6 +14,8 @@ const SUBJECT_LABELS: Record<FormType, string> = {
   financing: 'Financing Inquiry',
   careers: 'Careers Application',
   'trade-in': 'Trade-In Valuation Request',
+  consign: 'Consignment Inquiry',
+  sell: 'Sell My Unit Inquiry',
   general: 'General Inquiry',
 }
 

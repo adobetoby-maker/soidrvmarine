@@ -100,7 +100,41 @@ export function filterByLengthRange(inventory: InventoryUnit[], min?: number, ma
   })
 }
 
-// ── Keyword search (make / model / year / trim / category) ─────────────────
+// ── Sleeps &amp; slide-out facets (RVs) ──────────────────────────────────────
+export const SLEEPS_BANDS: Band[] = [
+  { label: 'Any' },
+  { label: 'Sleeps 2-4', min: 2, max: 4 },
+  { label: 'Sleeps 5-6', min: 5, max: 6 },
+  { label: 'Sleeps 7-8', min: 7, max: 8 },
+  { label: 'Sleeps 9+', min: 9 },
+]
+export const SLIDES_BANDS: Band[] = [
+  { label: 'Any' },
+  { label: 'No Slides', min: 0, max: 0 },
+  { label: '1 Slide', min: 1, max: 1 },
+  { label: '2 Slides', min: 2, max: 2 },
+  { label: '3+ Slides', min: 3 },
+]
+export function filterBySleeps(inv: InventoryUnit[], min?: number, max?: number): InventoryUnit[] {
+  if (min == null && max == null) return inv
+  return inv.filter(u => {
+    if (u.sleeps == null) return false
+    if (min != null && u.sleeps < min) return false
+    if (max != null && u.sleeps > max) return false
+    return true
+  })
+}
+export function filterBySlides(inv: InventoryUnit[], min?: number, max?: number): InventoryUnit[] {
+  if (min == null && max == null) return inv
+  return inv.filter(u => {
+    if (u.slideOuts == null) return false
+    if (min != null && u.slideOuts < min) return false
+    if (max != null && u.slideOuts > max) return false
+    return true
+  })
+}
+
+// ── Keyword search (make / model / year / trim / category) ─────────────
 
 export function matchesKeyword(unit: InventoryUnit, keyword: string): boolean {
   const q = keyword.trim().toLowerCase()
@@ -127,6 +161,10 @@ export interface ExtraFilterOptions {
   lengthMax?: number
   paymentMin?: number
   paymentMax?: number
+  sleepsMin?: number
+  sleepsMax?: number
+  slidesMin?: number
+  slidesMax?: number
   keyword?: string
 }
 
@@ -140,6 +178,12 @@ export function applyExtraFilters(inventory: InventoryUnit[], opts: ExtraFilterO
   }
   if (opts.paymentMin != null || opts.paymentMax != null) {
     result = filterByPaymentRange(result, opts.paymentMin, opts.paymentMax)
+  }
+  if (opts.sleepsMin != null || opts.sleepsMax != null) {
+    result = filterBySleeps(result, opts.sleepsMin, opts.sleepsMax)
+  }
+  if (opts.slidesMin != null || opts.slidesMax != null) {
+    result = filterBySlides(result, opts.slidesMin, opts.slidesMax)
   }
   if (opts.keyword) {
     result = filterByKeyword(result, opts.keyword)

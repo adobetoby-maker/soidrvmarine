@@ -4,7 +4,7 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react'
 import type { ConditionFilter, RvCategory, SortOption } from '@/lib/inventory'
-import { PRICE_BANDS, LENGTH_BANDS, PAYMENT_BANDS, findActiveBand, type Band } from '@/lib/inventory-filters'
+import { PRICE_BANDS, LENGTH_BANDS, PAYMENT_BANDS, SLEEPS_BANDS, SLIDES_BANDS, findActiveBand, type Band } from '@/lib/inventory-filters'
 
 interface Props {
   condition: ConditionFilter
@@ -23,13 +23,20 @@ interface Props {
   lengthMax?: number
   paymentMin?: number
   paymentMax?: number
+  sleepsMin?: number
+  sleepsMax?: number
+  slidesMin?: number
+  slidesMax?: number
   /** Set false to hide the length band filter (e.g. for a category with no lengthFt data). */
   showLengthFilter?: boolean
+  /** Set true to show Sleeps + Slide-out facets (RVs only). */
+  showSpecFilters?: boolean
 }
 
 export function InventoryFilters({
   condition, category, sort, brand, totalCount, filteredCount, categories, brands, label = 'units',
-  priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax, showLengthFilter = true,
+  priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax,
+  sleepsMin, sleepsMax, slidesMin, slidesMax, showLengthFilter = true, showSpecFilters = false,
 }: Props) {
   const router = useRouter()
   const pathname = usePathname()
@@ -57,6 +64,8 @@ export function InventoryFilters({
   const activePriceBand = findActiveBand(PRICE_BANDS, priceMin, priceMax)
   const activeLengthBand = findActiveBand(LENGTH_BANDS, lengthMin, lengthMax)
   const activePaymentBand = findActiveBand(PAYMENT_BANDS, paymentMin, paymentMax)
+  const activeSleepsBand = findActiveBand(SLEEPS_BANDS, sleepsMin, sleepsMax)
+  const activeSlidesBand = findActiveBand(SLIDES_BANDS, slidesMin, slidesMax)
 
   const chipBase: React.CSSProperties = {
     padding: '0.375rem 0.875rem',
@@ -204,6 +213,34 @@ export function InventoryFilters({
             ))}
           </div>
         </div>
+      )}
+
+      {/* Sleeps + Slide-out facets (RVs) */}
+      {showSpecFilters && (
+        <>
+          <div style={{ marginTop: '0.75rem' }}>
+            <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Sleeps</p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {SLEEPS_BANDS.map(band => (
+                <button key={band.label} style={band.label === activeSleepsBand.label ? chipActive : chipInactive}
+                  onClick={() => updateRange('sleepsMin', 'sleepsMax', band)}>
+                  {band.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ marginTop: '0.75rem' }}>
+            <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Slide-Outs</p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {SLIDES_BANDS.map(band => (
+                <button key={band.label} style={band.label === activeSlidesBand.label ? chipActive : chipInactive}
+                  onClick={() => updateRange('slidesMin', 'slidesMax', band)}>
+                  {band.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </>
       )}
     </div>
   )

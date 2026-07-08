@@ -7,6 +7,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { UnitCard } from '@/components/inventory/UnitCard'
 import { HeroVideo } from '@/components/HeroVideo'
 import { BrandStrip } from '@/components/BrandStrip'
+import { RV_INVENTORY, BOAT_INVENTORY } from '@/lib/inventory'
 import { HomeJsonLd } from '@/components/HomeJsonLd'
 import { DEALER_INFO } from '@/lib/types'
 
@@ -16,6 +17,9 @@ export const metadata: Metadata = {
     "Southern Idaho's only factory-direct Mercury dealer. Shop new and used RVs, boats, and Mercury outboard motors in Jerome, Idaho. 4.7★ from 1,200+ reviews. Serving Twin Falls, Burley, and all of Magic Valley.",
   alternates: { canonical: `https://${DEALER_INFO.domain}` },
 }
+
+const RV_BRANDS = [...new Set(RV_INVENTORY.map(u => u.make))].sort()
+const BOAT_BRANDS = [...new Set(BOAT_INVENTORY.map(u => u.make))].sort()
 
 const CATEGORIES = [
   {
@@ -491,6 +495,37 @@ export default function HomePage() {
             <p style={{ fontSize: '0.75rem', color: 'var(--color-sage)', marginTop: '1.25rem' }}>
               Estimated payments assume 10% down, 7.9% APR, 120-month term. Not a credit offer — actual terms subject to approval.
             </p>
+          </div>
+        </section>
+
+        {/* ── Shop by Brand ── */}
+        <section style={{ background: 'var(--color-parchment)', padding: '3.5rem 1.5rem', borderTop: '1px solid var(--color-parchment-dark)' }}>
+          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-amber-dark)', marginBottom: 10 }}>
+              Shop by Brand
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.5rem, 2.6vw, 2.1rem)', color: 'var(--color-navy)', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: '1.5rem' }}>
+              Find your favorite makes
+            </h2>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', marginBottom: '1.75rem' }}>
+              {RV_BRANDS.map(b => (
+                <Link key={b} href={`/rvs?brand=${encodeURIComponent(b)}`} style={{ padding: '0.5rem 1rem', borderRadius: 22, border: '1.5px solid var(--color-parchment-dark)', background: 'var(--color-surface)', color: 'var(--color-navy)', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }} className="brand-chip">
+                  {b}
+                </Link>
+              ))}
+            </div>
+            {BOAT_BRANDS.length > 0 && (
+              <>
+                <div style={{ fontSize: '0.6875rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-sage)', marginBottom: '0.6rem' }}>Boat Brands</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem' }}>
+                  {BOAT_BRANDS.map(b => (
+                    <Link key={b} href={`/boats?brand=${encodeURIComponent(b)}`} style={{ padding: '0.5rem 1rem', borderRadius: 22, border: '1.5px solid var(--color-parchment-dark)', background: 'var(--color-surface)', color: 'var(--color-navy)', fontWeight: 600, fontSize: '0.875rem', textDecoration: 'none' }} className="brand-chip">
+                      {b}
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </section>
 

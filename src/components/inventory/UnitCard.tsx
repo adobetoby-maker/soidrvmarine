@@ -3,6 +3,7 @@
 
 import Link from 'next/link'
 import { estimateMonthlyPayment } from '@/lib/inventory-filters'
+import { ShopListButtons } from '@/components/inventory/ShopListButtons'
 
 export interface UnitCardProps {
   year: number
@@ -47,6 +48,7 @@ export function UnitCard({ year, make, model, type, condition, price, photo, slu
     >
       {/* Photo */}
       <div style={{ position: 'relative', aspectRatio: compact ? '16/9' : '4/3', overflow: 'hidden', background: 'var(--color-navy)' }}>
+        <ShopListButtons slug={slug} />
         {photo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img

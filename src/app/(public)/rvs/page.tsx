@@ -30,7 +30,7 @@ export const revalidate = 600
 const KNOWN_CATEGORIES = ['Travel Trailer', 'Fifth Wheel', 'Class A', 'Class B', 'Class C', 'Toy Hauler']
 
 interface Props {
-  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string; priceMin?: string; priceMax?: string; lengthMin?: string; lengthMax?: string; paymentMin?: string; paymentMax?: string }>
+  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string; priceMin?: string; priceMax?: string; lengthMin?: string; lengthMax?: string; paymentMin?: string; paymentMax?: string; sleepsMin?: string; sleepsMax?: string; slidesMin?: string; slidesMax?: string }>
 }
 
 export default async function RvsPage({ searchParams }: Props) {
@@ -43,11 +43,13 @@ export default async function RvsPage({ searchParams }: Props) {
   const priceMin = num(params.priceMin), priceMax = num(params.priceMax)
   const lengthMin = num(params.lengthMin), lengthMax = num(params.lengthMax)
   const paymentMin = num(params.paymentMin), paymentMax = num(params.paymentMax)
+  const sleepsMin = num(params.sleepsMin), sleepsMax = num(params.sleepsMax)
+  const slidesMin = num(params.slidesMin), slidesMax = num(params.slidesMax)
 
   const inventory = await getRvInventory()
   const filtered = applyExtraFilters(
     filterAndSortRvs(inventory, condition, category, sort, brand),
-    { priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax },
+    { priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax, sleepsMin, sleepsMax, slidesMin, slidesMax },
   )
   const allCategories = [...new Set(inventory.map(u => u.category))].sort()
   const allBrands = [...new Set(inventory.map(u => u.make))].sort()
@@ -89,6 +91,11 @@ export default async function RvsPage({ searchParams }: Props) {
               lengthMax={lengthMax}
               paymentMin={paymentMin}
               paymentMax={paymentMax}
+              sleepsMin={sleepsMin}
+              sleepsMax={sleepsMax}
+              slidesMin={slidesMin}
+              slidesMax={slidesMax}
+              showSpecFilters
               label="RVs"
             />
           </Suspense>
