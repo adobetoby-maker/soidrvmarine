@@ -37,6 +37,44 @@ export function filterByPriceRange(inventory: InventoryUnit[], min?: number, max
   })
 }
 
+// ── Estimated monthly payment ("Shop by Payment", Bretz-style) ─────────────
+// Uses the same assumptions as the unit-detail PaymentCalculator defaults so the
+// browse-by-payment estimate matches what a shopper sees on the detail page:
+// 10% down, 7.9% APR, 120-month term. Always labeled "est." — not a quote.
+const EST_DOWN_PCT = 0.10
+const EST_APR = 0.079
+const EST_TERM_MONTHS = 120
+
+export function estimateMonthlyPayment(price: number | null | undefined): number | null {
+  if (price == null || price <= 0) return null
+  const loan = price * (1 - EST_DOWN_PCT)
+  const r = EST_APR / 12
+  const n = EST_TERM_MONTHS
+  const factor = Math.pow(1 + r, n)
+  return Math.round((loan * r * factor) / (factor - 1))
+}
+
+// Monthly-payment bands (dollars/month). min/max are payment thresholds, not price.
+export const PAYMENT_BANDS: Band[] = [
+  { label: 'Any Payment' },
+  { label: 'Under $200/mo', max: 200 },
+  { label: '$200 – $300/mo', min: 200, max: 300 },
+  { label: '$300 – $400/mo', min: 300, max: 400 },
+  { label: '$400+/mo', min: 400 },
+]
+
+/** Filters units whose ESTIMATED monthly payment falls within [min, max]. */
+export function filterByPaymentRange(inventory: InventoryUnit[], min?: number, max?: number): InventoryUnit[] {
+  if (min == null && max == null) return inventory
+  return inventory.filter(u => {
+    const pay = estimateMonthlyPayment(u.price)
+    if (pay == null) return false
+    if (min != null && pay < min) return false
+    if (max != null && pay > max) return false
+    return true
+  })
+}
+
 // ── Length bands (feet) — applies to both RVs and boats ────────────────────
 
 export const LENGTH_BANDS: Band[] = [
@@ -87,6 +125,8 @@ export interface ExtraFilterOptions {
   priceMax?: number
   lengthMin?: number
   lengthMax?: number
+  paymentMin?: number
+  paymentMax?: number
   keyword?: string
 }
 
@@ -97,6 +137,9 @@ export function applyExtraFilters(inventory: InventoryUnit[], opts: ExtraFilterO
   }
   if (opts.lengthMin != null || opts.lengthMax != null) {
     result = filterByLengthRange(result, opts.lengthMin, opts.lengthMax)
+  }
+  if (opts.paymentMin != null || opts.paymentMax != null) {
+    result = filterByPaymentRange(result, opts.paymentMin, opts.paymentMax)
   }
   if (opts.keyword) {
     result = filterByKeyword(result, opts.keyword)

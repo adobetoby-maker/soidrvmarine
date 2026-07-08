@@ -446,6 +446,54 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── Shop by Payment ── */}
+        <section style={{ background: 'var(--color-parchment)', padding: '4.5rem 1.5rem', borderTop: '1px solid var(--color-parchment-dark)' }}>
+          <div style={{ maxWidth: 1400, margin: '0 auto' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-amber-dark)', marginBottom: 12 }}>
+              Flexible Financing
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(1.75rem, 3vw, 2.5rem)', color: 'var(--color-navy)', letterSpacing: '-0.02em', lineHeight: 1.12, marginBottom: '0.75rem' }}>
+              Shop by Monthly Payment
+            </h2>
+            <p style={{ fontSize: '0.9375rem', color: 'var(--color-sage)', maxWidth: 560, lineHeight: 1.6, marginBottom: '2rem' }}>
+              Know your budget? Browse RVs and boats by estimated monthly payment. On-site financing, all credit considered.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
+              {[
+                { label: 'Under', amount: '$200', href: '/rvs?paymentMax=200' },
+                { label: 'From', amount: '$200', href: '/rvs?paymentMin=200&paymentMax=300' },
+                { label: 'From', amount: '$300', href: '/rvs?paymentMin=300&paymentMax=400' },
+                { label: 'From', amount: '$400', href: '/rvs?paymentMin=400' },
+              ].map(tier => (
+                <Link
+                  key={tier.href}
+                  href={tier.href}
+                  style={{
+                    display: 'flex', flexDirection: 'column', gap: 4,
+                    background: 'var(--color-navy)', color: 'white',
+                    borderRadius: 14, padding: '1.5rem 1.5rem 1.25rem',
+                    textDecoration: 'none', border: '1px solid var(--color-navy)',
+                    transition: 'transform 180ms ease, box-shadow 180ms ease',
+                    boxShadow: 'var(--shadow-card)',
+                  }}
+                  className="pay-tier"
+                >
+                  <span style={{ fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-amber-light)' }}>{tier.label}</span>
+                  <span style={{ fontFamily: 'var(--font-display)', fontSize: '2.25rem', fontWeight: 700, lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                    {tier.amount}<span style={{ fontSize: '0.9375rem', fontWeight: 500, color: 'oklch(80% 0.01 220)' }}>/mo</span>
+                  </span>
+                  <span style={{ marginTop: 'auto', paddingTop: '1rem', fontSize: '0.8125rem', fontWeight: 700, color: 'var(--color-amber-light)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    Browse <ChevronRight size={15} />
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-sage)', marginTop: '1.25rem' }}>
+              Estimated payments assume 10% down, 7.9% APR, 120-month term. Not a credit offer — actual terms subject to approval.
+            </p>
+          </div>
+        </section>
+
         {/* ── Mercury Exclusive ── */}
         <section style={{
           background: 'var(--color-ocean)',

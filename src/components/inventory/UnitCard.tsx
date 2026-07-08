@@ -2,6 +2,7 @@
 'use client'
 
 import Link from 'next/link'
+import { estimateMonthlyPayment } from '@/lib/inventory-filters'
 
 export interface UnitCardProps {
   year: number
@@ -106,15 +107,26 @@ export function UnitCard({ year, make, model, type, condition, price, photo, slu
           {year} {make} {model}
         </div>
 
-        <div style={{
-          fontSize: compact ? '1.0625rem' : '1.25rem',
-          fontWeight: 700,
-          color: 'var(--color-amber)',
-          marginTop: 'auto',
-          paddingTop: 4,
-          fontVariantNumeric: 'tabular-nums',
-        }}>
-          {callForPrice ? 'Call for Price' : `$${price.toLocaleString()}`}
+        <div style={{ marginTop: 'auto', paddingTop: 4 }}>
+          <div style={{
+            fontSize: compact ? '1.0625rem' : '1.25rem',
+            fontWeight: 700,
+            color: 'var(--color-amber)',
+            fontVariantNumeric: 'tabular-nums',
+          }}>
+            {callForPrice ? 'Call for Price' : `$${price.toLocaleString()}`}
+          </div>
+          {!callForPrice && estimateMonthlyPayment(price) != null && (
+            <div style={{
+              fontSize: '0.75rem',
+              color: 'var(--color-sage)',
+              fontWeight: 600,
+              fontVariantNumeric: 'tabular-nums',
+              marginTop: 1,
+            }}>
+              est. ${estimateMonthlyPayment(price)!.toLocaleString()}/mo
+            </div>
+          )}
         </div>
       </div>
     </Link>

@@ -9,7 +9,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-const PLAYBACK_RATE = 0.2 // 20% speed — slow ambient drift
+const PLAYBACK_RATE = 0.22 // 22% speed — slow ambient drift (owner: +10%)
 
 interface Props {
   poster: string

@@ -4,7 +4,7 @@
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useTransition } from 'react'
 import type { ConditionFilter, RvCategory, SortOption } from '@/lib/inventory'
-import { PRICE_BANDS, LENGTH_BANDS, findActiveBand, type Band } from '@/lib/inventory-filters'
+import { PRICE_BANDS, LENGTH_BANDS, PAYMENT_BANDS, findActiveBand, type Band } from '@/lib/inventory-filters'
 
 interface Props {
   condition: ConditionFilter
@@ -21,13 +21,15 @@ interface Props {
   priceMax?: number
   lengthMin?: number
   lengthMax?: number
+  paymentMin?: number
+  paymentMax?: number
   /** Set false to hide the length band filter (e.g. for a category with no lengthFt data). */
   showLengthFilter?: boolean
 }
 
 export function InventoryFilters({
   condition, category, sort, brand, totalCount, filteredCount, categories, brands, label = 'units',
-  priceMin, priceMax, lengthMin, lengthMax, showLengthFilter = true,
+  priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax, showLengthFilter = true,
 }: Props) {
   const router = useRouter()
   const pathname = usePathname()
@@ -54,6 +56,7 @@ export function InventoryFilters({
 
   const activePriceBand = findActiveBand(PRICE_BANDS, priceMin, priceMax)
   const activeLengthBand = findActiveBand(LENGTH_BANDS, lengthMin, lengthMax)
+  const activePaymentBand = findActiveBand(PAYMENT_BANDS, paymentMin, paymentMax)
 
   const chipBase: React.CSSProperties = {
     padding: '0.375rem 0.875rem',
@@ -154,7 +157,7 @@ export function InventoryFilters({
       )}
 
       {/* Price range chips */}
-      <div style={{ marginBottom: showLengthFilter ? '0.75rem' : 0 }}>
+      <div style={{ marginBottom: '0.75rem' }}>
         <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Price</p>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {PRICE_BANDS.map(band => (
@@ -162,6 +165,22 @@ export function InventoryFilters({
               key={band.label}
               style={band.label === activePriceBand.label ? chipActive : chipInactive}
               onClick={() => updateRange('priceMin', 'priceMax', band)}
+            >
+              {band.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Monthly payment chips (Shop by Payment) */}
+      <div style={{ marginBottom: showLengthFilter ? '0.75rem' : 0 }}>
+        <p style={{ fontSize: '0.6875rem', color: 'var(--color-sage)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.5rem' }}>Monthly Payment <span style={{ fontWeight: 500, textTransform: 'none', letterSpacing: 0 }}>(est.)</span></p>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {PAYMENT_BANDS.map(band => (
+            <button
+              key={band.label}
+              style={band.label === activePaymentBand.label ? chipActive : chipInactive}
+              onClick={() => updateRange('paymentMin', 'paymentMax', band)}
             >
               {band.label}
             </button>

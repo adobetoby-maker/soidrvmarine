@@ -10,6 +10,7 @@ import {
   type SortOption,
 } from '@/lib/inventory'
 import { getBoatInventory } from '@/lib/db'
+import { applyExtraFilters } from '@/lib/inventory-filters'
 import { DEALER_INFO } from '@/lib/types'
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
 export const revalidate = 600
 
 interface Props {
-  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string }>
+  searchParams: Promise<{ condition?: string; category?: string; sort?: string; brand?: string; priceMin?: string; priceMax?: string; lengthMin?: string; lengthMax?: string; paymentMin?: string; paymentMax?: string }>
 }
 
 export default async function BoatsPage({ searchParams }: Props) {
@@ -35,9 +36,16 @@ export default async function BoatsPage({ searchParams }: Props) {
   const category = (params.category as RvCategory) || 'All'
   const sort = (params.sort as SortOption) || 'price-desc'
   const brand = params.brand || 'All'
+  const num = (v?: string) => (v ? Number(v) : undefined)
+  const priceMin = num(params.priceMin), priceMax = num(params.priceMax)
+  const lengthMin = num(params.lengthMin), lengthMax = num(params.lengthMax)
+  const paymentMin = num(params.paymentMin), paymentMax = num(params.paymentMax)
 
   const inventory = await getBoatInventory()
-  const filtered = filterAndSortRvs(inventory, condition, category, sort, brand)
+  const filtered = applyExtraFilters(
+    filterAndSortRvs(inventory, condition, category, sort, brand),
+    { priceMin, priceMax, lengthMin, lengthMax, paymentMin, paymentMax },
+  )
   const allCategories = [...new Set(inventory.map(u => u.category))].sort()
   const allBrands = [...new Set(inventory.map(u => u.make))].sort()
 
@@ -72,6 +80,12 @@ export default async function BoatsPage({ searchParams }: Props) {
               filteredCount={filtered.length}
               categories={allCategories}
               brands={allBrands}
+              priceMin={priceMin}
+              priceMax={priceMax}
+              lengthMin={lengthMin}
+              lengthMax={lengthMax}
+              paymentMin={paymentMin}
+              paymentMax={paymentMax}
               label="boats"
             />
           </Suspense>

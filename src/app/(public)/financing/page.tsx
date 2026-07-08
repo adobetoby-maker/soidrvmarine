@@ -45,6 +45,10 @@ export default function FinancingPage() {
           <p style={{ fontSize: '1rem', color: 'oklch(78% 0.01 220)', maxWidth: 560, lineHeight: 1.65, marginBottom: '2rem' }}>
             We handle financing right here at the dealership. No trips to your bank. No waiting weeks. Most customers drive home the same day they apply.
           </p>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', fontWeight: 600, color: 'var(--color-amber-light)', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.16)', borderRadius: 20, padding: '0.4375rem 0.875rem', marginBottom: '1.75rem' }}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+            No SSN required to see your rate &mdash; soft credit check, won&apos;t affect your score
+          </div>
           <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
             <Link
               href="/financing/apply"

@@ -161,3 +161,6 @@ img {
   max-width: 100%;
   height: auto;
 }
+
+/* Shop-by-Payment tiles hover (home is a server component) */
+.pay-tier:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(28,43,56,0.18); }
