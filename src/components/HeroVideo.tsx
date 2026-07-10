@@ -5,11 +5,13 @@
 // falls back to the poster still both for prefers-reduced-motion users and
 // gracefully when the video file doesn't exist yet (onError -> still image).
 // Never a blank hero: the poster renders first in all cases.
-// The clip loops in slow motion (0.2x) for a calm, ambient boat drift.
+// The clip is a calm, ambient boat drift — slow motion is baked into the
+// source file itself (motion-interpolated to 30fps, ~4.5x longer) rather
+// than done via video.playbackRate, which browsers render by holding/
+// duplicating the sparse original frames instead of smoothly interpolating,
+// producing visible judder ("flitter") at low rates like 0.22x.
 
-import { useEffect, useRef, useState } from 'react'
-
-const PLAYBACK_RATE = 0.22 // 22% speed — slow ambient drift (owner: +10%)
+import { useEffect, useState } from 'react'
 
 interface Props {
   poster: string
@@ -29,7 +31,6 @@ const mediaStyle: React.CSSProperties = {
 export function HeroVideo({ poster, videoSrc, alt }: Props) {
   const [reducedMotion, setReducedMotion] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
-  const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -39,11 +40,6 @@ export function HeroVideo({ poster, videoSrc, alt }: Props) {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
-  // Set slow-motion rate once the element mounts (playbackRate can't be an attribute).
-  useEffect(() => {
-    if (videoRef.current) videoRef.current.playbackRate = PLAYBACK_RATE
-  }, [reducedMotion, videoFailed])
-
   if (reducedMotion || videoFailed) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={poster} alt={alt} style={mediaStyle} />
@@ -51,7 +47,6 @@ export function HeroVideo({ poster, videoSrc, alt }: Props) {
 
   return (
     <video
-      ref={videoRef}
       autoPlay
       muted
       loop
@@ -59,8 +54,6 @@ export function HeroVideo({ poster, videoSrc, alt }: Props) {
       poster={poster}
       preload="auto"
       aria-label={alt}
-      // Re-assert the slow rate on load — some browsers reset it when the source loads.
-      onLoadedData={(e) => { e.currentTarget.playbackRate = PLAYBACK_RATE }}
       onError={() => setVideoFailed(true)}
       style={mediaStyle}
     >
