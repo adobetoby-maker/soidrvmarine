@@ -1,6 +1,8 @@
 # Verify — soidrvmarine hero smoothness fix (2026-07-10)
 
-Live: https://soidrvmarine.worker-bee.app · deploy: launchd `com.soidrvmarine.web` (git pull + npm run build + launchctl kickstart on Mac Studio, NOT Coolify — corrected from prior notes, no Coolify container found on this host) · all routes HTTP 200
+Live: https://soidrvmarine.worker-bee.app · deploy: launchd `com.soidrvmarine.web` (git pull + npm run build + launchctl kickstart on Mac Studio) · all routes HTTP 200
+
+Deploy mechanism note: this is NOT Coolify, despite the 2026-07-07 entry below referencing a Coolify deploy ID. The 2026-07-08 ops-repair entry (below) explains why — the Coolify VM died and the site was migrated to a host-run `next start` process supervised by launchd. That migration note existed only as an uncommitted local file on Mac Studio and had never reached git; it's committed here for the first time, in its original form, directly beneath this entry.
 
 **Root cause:** Owner reported "the boat flitters" on the hero. `HeroVideo.tsx` was slowing the clip at runtime via `video.playbackRate = 0.22`. Browsers render playbackRate <1 by holding/duplicating the source's sparse 24fps/121-frame timeline rather than interpolating — visible judder, not the intended calm drift.
 
@@ -14,7 +16,39 @@ Live: https://soidrvmarine.worker-bee.app · deploy: launchd `com.soidrvmarine.w
 | Live deploy verification | `curl -sI https://soidrvmarine.worker-bee.app` → 200. `curl -sI .../api/hero-video` → content-length 1438912 (matches new re-encoded file, was 399592). Live screenshot confirms hero renders correctly post-deploy. | PASS |
 | tsc | Not re-run standalone this pass; `npm run build` (which runs the TS check) completed clean with zero errors, 107 routes generated including all 67 inventory detail pages. | PASS |
 
-Superseded from the entry below: the "Hero boat drift, slow loop" and "Home hero video" rows both described the now-removed `playbackRate=0.22` runtime slowdown as working-as-intended — true for basic playback (loops, no error) but that check tested "does it play," not "does it play smoothly," which is why the judder shipped and was only caught when the owner saw it live. Real slow motion is now baked into the file; those rows are kept below for history but the playbackRate figures they cite no longer reflect the code.
+Superseded from the entries below: the "Hero boat drift, slow loop" and "Home hero video" rows both described the now-removed `playbackRate=0.22` runtime slowdown as working-as-intended — true for basic playback (loops, no error) but that check tested "does it play," not "does it play smoothly," which is why the judder shipped and was only caught when the owner saw it live. Real slow motion is now baked into the file; those rows are kept below for history but the playbackRate figures they cite no longer reflect the code.
+
+---
+
+# Verify — soidrvmarine production recovery (2026-07-08, ops-repair)
+
+Live: https://soidrvmarine.worker-bee.app — restored after Coolify VM guest failure.
+Root cause chain: host disk 100% full (nixpacks build layers) → repeated force-kills of the
+Coolify Lima VM during disk-full → guest FS damaged → VM boots (VZ "running") but guest never
+reaches networked/sshd state (Lima stuck "waiting for port 22"; direct SSH kex reset). serialv.log
+0 bytes was a red herring (no serial console configured in this VZ profile).
+
+Fix (non-destructive, zero added cost, domain preserved): bypassed the dead VM entirely — run
+soidrvmarine as a HOST process (mirrors how quillion:3010 already serves live) and repointed the
+standalone cloudflared ingress from the VM proxy to the host. VM left untouched for later repair.
+
+| Spec item | Observed | Result |
+|---|---|---|
+| Host disk root cause | df: 55Gi free both volumes (was 211Mi). Fixed. | PASS |
+| Diagnosis: VM vs container | quillion 200 (DYNAMIC, live) while soid 502 → not whole-VM; tunnel is host-side standalone config.yml routing hostnames→localhost:PORT | PASS |
+| Rebuild | rm -rf .next && npm run build → exit 0, all routes incl /websiteofferplan + 67 SSG pages generated | PASS |
+| Host process | next start -p 3011 -H 0.0.0.0; localhost:3011 → 200, inventory 49/18 | PASS |
+| Tunnel repoint | config.yml soidrvmarine service https://localhost:4443 (dead VM) → http://localhost:3011; backed up first; unique swap verified | PASS |
+| cloudflared reload | SIGHUP pid 36650 | PASS |
+| Live routes 200 | / /rvs /boats /websiteofferplan /how-it-works /guides /compare /saved /sell /financing all 200 | PASS |
+| Inventory live | home "49 in stock" + "18 in stock" server-rendered | PASS |
+| Hero video Range | /api/hero-video with Range → 206 (Safari fix intact) | PASS |
+| /websiteofferplan | Bretz/Bridge/Social content present | PASS |
+| Durability | launchd com.soidrvmarine.web loaded (RunAtLoad+KeepAlive); nohup→launchd handoff, still 200; survives reboot + crash | PASS |
+
+Every row above is PASS. Ops-repair proof: live curl 200 + server-rendered content confirmed (not a shell).
+Outstanding (non-blocking): Coolify Lima VM still down — holds farnsworthpool + the 4 *-demo:80 sites.
+Repairing/rebuilding it is a separate blast-radius decision (see report to operator).
 
 ---
 
