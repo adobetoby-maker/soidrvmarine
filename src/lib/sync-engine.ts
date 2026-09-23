@@ -106,6 +106,7 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
           stock_number: op.stock_number,
           unit_type: op.unit_type,
           identifier_type: op.identifier_type,
+          identifier: op.identifier ?? null,
           category: op.category,
           condition: op.condition,
           status: 'active',

@@ -12,6 +12,7 @@ export interface DmsExportOp {
   // ADD
   unit_type?: UnitType
   identifier_type?: IdentifierType
+  identifier?: string
   category?: string
   condition?: Condition
   year?: number
@@ -23,9 +24,9 @@ export interface DmsExportOp {
   new_price?: number
 }
 
-// Two changes against real seeded units (rv006, boat001) + two brand-new
-// units DeskManager would report as never-seen-before. This is what a real
-// diff against the DMS export would look like on a normal day.
+// Two changes against real seeded units (rv006, boat001) + brand-new units
+// DeskManager would report as never-seen-before. This is what a real diff
+// against the DMS export would look like on a normal day.
 export function buildMockDmsExport(): DmsExportOp[] {
   return [
     { dms_id: 'rv006', operation: 'UPDATE_PRICE', new_price: 31450 },
@@ -55,6 +56,24 @@ export function buildMockDmsExport(): DmsExportOp[] {
       model: 'F8520',
       price: 34990,
       stock_number: 'DEMO-BOAT-NEW-001',
+    },
+    {
+      // The demo key: a brand-new unit DeskManager has never reported before,
+      // with a real VIN on file — the one unit in this export that's actually
+      // eligible for every RV channel including Meta (which every other seeded
+      // unit fails, since none of them carry a VIN).
+      dms_id: 'DEMO-KEY-001',
+      operation: 'ADD',
+      unit_type: 'rv',
+      identifier_type: 'vin',
+      identifier: '1FDXE45S1KHA00001',
+      category: 'travel-trailer',
+      condition: 'new',
+      year: 2027,
+      make: 'Keystone',
+      model: 'Cougar 22RBS',
+      price: 24990,
+      stock_number: 'DEMO-KEY-001',
     },
   ]
 }
