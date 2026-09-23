@@ -50,6 +50,7 @@ export function buildMockDmsExport(): DmsExportOp[] {
       operation: 'ADD',
       unit_type: 'boat',
       identifier_type: 'hin',
+      identifier: 'MBYF85202609',
       category: 'pontoon',
       condition: 'new',
       year: 2026,
@@ -57,6 +58,23 @@ export function buildMockDmsExport(): DmsExportOp[] {
       model: 'F8520',
       price: 34990,
       stock_number: 'DEMO-BOAT-NEW-001',
+    },
+    {
+      // Used-boat counterpart to DEMO-USED-RV-001 — proves a used boat with
+      // a valid HIN clears the boats_group eligibility gate the same way a
+      // used RV with a VIN clears Meta's.
+      dms_id: 'DEMO-USED-BOAT-001',
+      operation: 'ADD',
+      unit_type: 'boat',
+      identifier_type: 'hin',
+      identifier: 'MRC1676T1906',
+      category: 'fishing',
+      condition: 'used',
+      year: 2019,
+      make: 'MirroCraft',
+      model: '1676 Troller',
+      price: 18500,
+      stock_number: 'DEMO-USED-BOAT-001',
     },
     {
       // The demo key: a brand-new unit DeskManager has never reported before,
@@ -76,21 +94,10 @@ export function buildMockDmsExport(): DmsExportOp[] {
       price: 24990,
       stock_number: 'DEMO-KEY-001',
     },
-    {
-      // Proves used inventory runs through the identical path as new —
-      // `condition` is stored but never checked by any eligibility gate.
-      dms_id: 'DEMO-USED-RV-001',
-      operation: 'ADD',
-      unit_type: 'rv',
-      identifier_type: 'vin',
-      identifier: '4X4TDMPU9NG012345',
-      category: 'fifth-wheel',
-      condition: 'used',
-      year: 2021,
-      make: 'Keystone',
-      model: 'Montana 3121RL',
-      price: 38900,
-      stock_number: 'DEMO-USED-RV-001',
-    },
+    // DEMO-USED-RV-001's ADD op lived here — removed now that the unit
+    // exists in the DB and the SOLD op above (line 34) is exercising its
+    // removal path. Leaving both ops in at once double-dispatched it: the
+    // SOLD op marked it sold, then this ADD op's "already exists" branch
+    // re-added it to touchedUnits and re-ran all 7 channels a second time.
   ]
 }

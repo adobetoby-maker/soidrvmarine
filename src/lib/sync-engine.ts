@@ -94,6 +94,35 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
       const { data: existing } = await supabase.from('units').select('*').eq('dms_id', op.dms_id).maybeSingle()
 
       if (existing) {
+        // Real DeskManager exports carry the full current record every poll,
+        // not just deltas — a unit can legitimately gain a VIN/HIN after its
+        // first listing (paperwork catches up). Diff the identifier fields
+        // and persist any change instead of treating "already exists" as
+        // nothing-to-do.
+        const identifierChanged =
+          (op.identifier_type && op.identifier_type !== existing.identifier_type) ||
+          (op.identifier && op.identifier !== existing.identifier)
+
+        if (identifierChanged) {
+          const { data: patched } = await supabase
+            .from('units')
+            .update({
+              identifier_type: op.identifier_type ?? existing.identifier_type,
+              identifier: op.identifier ?? existing.identifier,
+              dms_last_seen_at: new Date().toISOString(),
+            })
+            .eq('dms_id', op.dms_id)
+            .select()
+            .single()
+
+          ingest.added.push({
+            dms_id: op.dms_id,
+            summary: `${op.year} ${op.make} ${op.model} already existed — ${op.identifier_type?.toUpperCase()} added/changed: ${op.identifier}`,
+          })
+          touchedUnits.push((patched ?? existing) as Unit)
+          continue
+        }
+
         ingest.added.push({ dms_id: op.dms_id, summary: `${op.year} ${op.make} ${op.model} already exists — no-op` })
         touchedUnits.push(existing as Unit)
         continue

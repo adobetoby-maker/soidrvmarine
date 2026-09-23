@@ -10,6 +10,11 @@ export interface EligibilityResult {
   reason?: string // populated when eligible === false
 }
 
+// 3-char manufacturer code + 5-char hull serial + 2-digit model year +
+// 2-digit production month, per the Boats Group feed spec noted in the
+// original boats-group.ts adapter stub.
+const HIN_PATTERN = /^[A-Z]{3}[A-Z0-9]{5}[A-Z0-9]{4}$/
+
 export function checkEligibility(channelId: ChannelId, unit: Unit): EligibilityResult {
   switch (channelId) {
     case 'site':
@@ -24,6 +29,12 @@ export function checkEligibility(channelId: ChannelId, unit: Unit): EligibilityR
     case 'boats_group':
       if (unit.unit_type !== 'boat') {
         return { eligible: false, reason: 'Boats Group (Boat Trader + YachtWorld + boats.com) only accepts boats and PWCs' }
+      }
+      if (unit.identifier_type !== 'hin' || !unit.identifier) {
+        return { eligible: false, reason: 'Boats Group requires a HIN on file — DeskManager has not supplied one for this unit' }
+      }
+      if (!HIN_PATTERN.test(unit.identifier)) {
+        return { eligible: false, reason: `Boats Group requires a valid 12-character HIN — "${unit.identifier}" does not match the manufacturer+serial+year+month format` }
       }
       return { eligible: true }
 
