@@ -4,17 +4,14 @@
 // board. This is the same logic worker/jobs/* runs on a schedule via pg-boss
 // in production — this module is the shared implementation both call.
 //
-// The only thing simulated here is the actual outbound network call to each
-// channel (RV Trader, Meta, etc.) — we don't have dealer credentials for any
-// of them yet (see channel_settings.enabled, all false except 'site'). Every
-// other step — ingestion, diffing, eligibility rules, status writes — is
-// real and hits the live Supabase project.
+// Outbound marketplace adapters are not wired here. Eligible external channels
+// remain pending; only the site listing is published by this engine.
 
 import { createServiceClient } from './supabase/server'
 import type { ChannelId, ListingStatus, Unit } from './types'
 import { resolvePostingChannels } from './types'
 import { checkEligibility } from './channel-rules'
-import { buildMockDmsExport } from './mock-dms-export'
+import { buildMockDmsExport, type DmsExportOp } from './mock-dms-export'
 
 const ALL_CHANNELS: ChannelId[] = ['site', 'rv_trader', 'boats_group', 'rv_universe', 'meta', 'google_vl', 'craigslist']
 
@@ -29,7 +26,6 @@ export interface ChannelRunResult {
 export interface SyncResult {
   startedAt: string
   completedAt: string
-  simulateConnected: boolean
   ingest: {
     added: { dms_id: string; summary: string }[]
     updated: { dms_id: string; summary: string }[]
@@ -45,38 +41,11 @@ function slugify(year: number, make: string, model: string, stock: string) {
     .replace(/(^-|-$)/g, '')
 }
 
-async function simulateChannelCall(
-  enabled: boolean,
-  simulateConnected: boolean
-): Promise<{ status: ListingStatus; reason: string }> {
-  // Realistic latency for what would be a real outbound call.
-  await new Promise(r => setTimeout(r, 120 + Math.random() * 300))
-
-  if (!enabled && !simulateConnected) {
-    return {
-      status: 'pending',
-      reason: 'Channel not yet connected — awaiting dealer application/credentials (channel_settings.enabled = false)',
-    }
-  }
-
-  // Fail occasionally even when "connected" so the board reflects a real
-  // system rather than a theatrical always-green demo.
-  if (Math.random() < 0.08) {
-    return { status: 'failed', reason: 'SIMULATED: channel rejected the listing (photo count below minimum)' }
-  }
-
-  return {
-    status: 'live',
-    reason: !enabled && simulateConnected ? 'SIMULATED — will be a real publish once credentials are added' : 'Published',
-  }
-}
-
-export async function runSync(opts: { simulateConnected?: boolean } = {}): Promise<SyncResult> {
-  const simulateConnected = !!opts.simulateConnected
+export async function runSync(opts: { operations?: DmsExportOp[]; client?: ReturnType<typeof createServiceClient> } = {}): Promise<SyncResult> {
   const startedAt = new Date().toISOString()
-  const supabase = createServiceClient()
+  const supabase = opts.client ?? createServiceClient()
 
-  const ops = buildMockDmsExport()
+  const ops = opts.operations ?? buildMockDmsExport()
 
   const { data: settingsRows } = await supabase.from('channel_settings').select('channel_id, enabled')
   const enabledMap = new Map<ChannelId, boolean>(
@@ -143,6 +112,7 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
           make: op.make,
           model: op.model,
           price: op.price,
+          description: op.description ?? null,
           slug,
           posting_profile: 'FULL',
           dms_last_seen_at: new Date().toISOString(),
@@ -155,6 +125,16 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
         continue
       }
       ingest.added.push({ dms_id: op.dms_id, summary: `NEW: ${op.year} ${op.make} ${op.model} — $${op.price?.toLocaleString()}` })
+      if (op.photo_url) {
+        const { error: mediaError } = await supabase.from('media').insert({
+          unit_id: inserted.id,
+          url: op.photo_url,
+          sort_order: 0,
+          is_primary: true,
+          source: 'demo',
+        })
+        if (mediaError) throw new Error(`Failed to attach demo image: ${mediaError.message}`)
+      }
       touchedUnits.push(inserted as Unit)
     }
 
@@ -189,13 +169,17 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
         touchedUnits.push(before as Unit)
         continue
       }
-      const { data: after } = await supabase
+      const { data: after, error } = await supabase
         .from('units')
         .update({ status: 'sold', sold_at: new Date().toISOString() })
         .eq('dms_id', op.dms_id)
         .select()
         .single()
 
+      if (error || !after) {
+        ingest.sold.push({ dms_id: op.dms_id, summary: `FAILED to mark sold: ${error?.message ?? 'unknown error'}` })
+        continue
+      }
       ingest.sold.push({ dms_id: op.dms_id, summary: `SOLD: ${before.year} ${before.make} ${before.model} — removing from every channel` })
       if (after) touchedUnits.push(after as Unit)
     }
@@ -207,24 +191,50 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
     const profileChannels = resolvePostingChannels(unit)
 
     for (const channelId of ALL_CHANNELS) {
-      if (channelId === 'site') {
-        await supabase.from('channel_listings').upsert(
+      // Removal is unconditional: a previously published listing must not be
+      // left live because a profile or eligibility rule later changed.
+      if (isSold) {
+        const { error } = await supabase.from('channel_listings').upsert(
           {
             unit_id: unit.id,
-            channel_id: 'site',
-            status: isSold ? 'removed' : 'live',
+            channel_id: channelId,
+            status: 'removed',
+            removed_at: new Date().toISOString(),
             last_synced_at: new Date().toISOString(),
-            removed_at: isSold ? new Date().toISOString() : null,
-            first_published_at: isSold ? undefined : new Date().toISOString(),
+            last_error: null,
           },
           { onConflict: 'unit_id,channel_id' }
         )
+        if (error) throw new Error(`Failed to remove ${unit.dms_id} from ${channelId}: ${error.message}`)
+        channelRuns.push({
+          dms_id: unit.dms_id,
+          unit_type: unit.unit_type,
+          channel_id: channelId,
+          outcome: 'removed',
+          reason: 'Marked removed locally; external unpublish is not connected',
+        })
+        continue
+      }
+
+      if (channelId === 'site') {
+        const { error } = await supabase.from('channel_listings').upsert(
+          {
+            unit_id: unit.id,
+            channel_id: 'site',
+            status: 'live',
+            last_synced_at: new Date().toISOString(),
+            removed_at: null,
+            first_published_at: new Date().toISOString(),
+          },
+          { onConflict: 'unit_id,channel_id' }
+        )
+        if (error) throw new Error(`Failed to publish ${unit.dms_id} on site: ${error.message}`)
         channelRuns.push({
           dms_id: unit.dms_id,
           unit_type: unit.unit_type,
           channel_id: 'site',
-          outcome: isSold ? 'removed' : 'live',
-          reason: isSold ? 'Unit sold — removed from public site' : 'ISR revalidated on soidrvmarine',
+          outcome: 'live',
+          reason: 'Published on soidrvmarine',
         })
         continue
       }
@@ -242,7 +252,7 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
 
       const gate = checkEligibility(channelId, unit)
       if (!gate.eligible) {
-        await supabase.from('channel_listings').upsert(
+        const { error } = await supabase.from('channel_listings').upsert(
           {
             unit_id: unit.id,
             channel_id: channelId,
@@ -252,6 +262,7 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
           },
           { onConflict: 'unit_id,channel_id' }
         )
+        if (error) throw new Error(`Failed to flag ${unit.dms_id} for ${channelId}: ${error.message}`)
         channelRuns.push({
           dms_id: unit.dms_id,
           unit_type: unit.unit_type,
@@ -262,61 +273,44 @@ export async function runSync(opts: { simulateConnected?: boolean } = {}): Promi
         continue
       }
 
-      if (isSold) {
-        await supabase
-          .from('channel_listings')
-          .update({ status: 'removed', removed_at: new Date().toISOString() })
-          .eq('unit_id', unit.id)
-          .eq('channel_id', channelId)
-        channelRuns.push({
-          dms_id: unit.dms_id,
-          unit_type: unit.unit_type,
-          channel_id: channelId,
-          outcome: 'removed',
-          reason: 'Unit sold — unpublished',
-        })
-        continue
-      }
-
       const enabled = enabledMap.get(channelId) ?? false
-      const sim = await simulateChannelCall(enabled, simulateConnected)
-      const externalId = sim.status === 'live' ? `${channelId.toUpperCase()}-${unit.dms_id}-${Math.floor(1000 + Math.random() * 9000)}` : null
+      const reason = enabled
+        ? 'Credentials enabled, but outbound publishing is not implemented'
+        : 'Channel not connected — awaiting dealer credentials'
 
-      await supabase.from('channel_listings').upsert(
+      const { error: listingError } = await supabase.from('channel_listings').upsert(
         {
           unit_id: unit.id,
           channel_id: channelId,
-          status: sim.status,
-          external_id: externalId,
-          external_url: externalId ? `https://example-${channelId.replace(/_/g, '-')}.test/listing/${externalId}` : null,
-          last_error: sim.status !== 'live' ? sim.reason : null,
+          status: 'pending',
+          external_id: null,
+          external_url: null,
+          last_error: reason,
           last_synced_at: new Date().toISOString(),
-          first_published_at: sim.status === 'live' ? new Date().toISOString() : undefined,
         },
         { onConflict: 'unit_id,channel_id' }
       )
+      if (listingError) throw new Error(`Failed to queue ${unit.dms_id} for ${channelId}: ${listingError.message}`)
 
       await supabase.from('sync_jobs').insert({
         unit_id: unit.id,
         channel_id: channelId,
         action: 'publish',
-        attempts: 1,
-        result: { status: sim.status, reason: sim.reason },
-        started_at: new Date().toISOString(),
-        completed_at: new Date().toISOString(),
+        attempts: 0,
+        result: { status: 'pending', reason },
       })
 
       channelRuns.push({
         dms_id: unit.dms_id,
         unit_type: unit.unit_type,
         channel_id: channelId,
-        outcome: sim.status,
-        reason: sim.reason,
+        outcome: 'pending',
+        reason,
       })
     }
   }
 
-  return { startedAt, completedAt: new Date().toISOString(), simulateConnected, ingest, channelRuns }
+  return { startedAt, completedAt: new Date().toISOString(), ingest, channelRuns }
 }
 
 export async function getSyncStatus() {

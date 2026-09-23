@@ -233,7 +233,7 @@ export default async function UnitDetailPage(
 
               {/* Secondary CTA */}
               <Link
-                href={`/contact?unit=${encodeURIComponent(title)}`}
+                href={`/contact?unit=${encodeURIComponent(title)}${unit.stockNumber ? `&stock=${encodeURIComponent(unit.stockNumber)}` : ''}`}
                 style={{
                   display: 'block',
                   width: '100%',

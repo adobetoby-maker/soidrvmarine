@@ -12,10 +12,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
 
-  const resend = new Resend(process.env.RESEND_API_KEY)
+  if (!process.env.RESEND_API_KEY) {
+    return NextResponse.json({ error: 'Email delivery is not configured' }, { status: 503 })
+  }
 
   try {
-    await resend.emails.send({
+    const resend = new Resend(process.env.RESEND_API_KEY)
+    const { error } = await resend.emails.send({
       from: 'Demo SIRVMarine <onboarding@resend.dev>',
       to: DEALER_INFO.email,
       replyTo: email,
@@ -32,6 +35,7 @@ export async function POST(request: Request) {
         message || '(no message)',
       ].join('\n'),
     })
+    if (error) return NextResponse.json({ error: error.message }, { status: 502 })
     return NextResponse.json({ success: true })
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 })

@@ -17,6 +17,7 @@ type DbRow = {
   id: string
   slug: string | null
   dms_id: string
+  stock_number: string
   year: number
   make: string
   model: string
@@ -57,6 +58,7 @@ function rowToUnit(row: DbRow): InventoryUnit {
 
   return {
     slug: row.slug ?? row.dms_id,
+    stockNumber: row.stock_number,
     year: row.year,
     make: row.make,
     model: row.model,
@@ -83,9 +85,9 @@ export async function getRvInventory(): Promise<InventoryUnit[]> {
     .eq('status', 'active')
     .order('year', { ascending: false })
 
-  if (error || !data?.length) {
-    console.warn('[db] RV query failed, using static fallback:', error?.message)
-    return RV_INVENTORY
+  if (error || !data) {
+    console.error('[db] RV query failed:', error?.message)
+    return []
   }
 
   return (data as DbRow[]).map(rowToUnit)
@@ -102,9 +104,9 @@ export async function getBoatInventory(): Promise<InventoryUnit[]> {
     .eq('status', 'active')
     .order('year', { ascending: false })
 
-  if (error || !data?.length) {
-    console.warn('[db] Boat query failed, using static fallback:', error?.message)
-    return BOAT_INVENTORY
+  if (error || !data) {
+    console.error('[db] Boat query failed:', error?.message)
+    return []
   }
 
   return (data as DbRow[]).map(rowToUnit)
@@ -125,9 +127,9 @@ export async function getPowersportsInventory(): Promise<InventoryUnit[]> {
     .eq('status', 'active')
     .order('year', { ascending: false })
 
-  if (error || !data?.length) {
-    if (error) console.warn('[db] Powersports query failed, using static fallback:', error.message)
-    return POWERSPORTS_INVENTORY
+  if (error || !data) {
+    console.error('[db] Powersports query failed:', error?.message)
+    return []
   }
 
   return (data as DbRow[]).map(rowToUnit)
@@ -146,9 +148,9 @@ export async function getMotorInventory(): Promise<InventoryUnit[]> {
     .eq('status', 'active')
     .order('year', { ascending: false })
 
-  if (error || !data?.length) {
-    if (error) console.warn('[db] Motor query failed, using static fallback:', error.message)
-    return MOTOR_INVENTORY
+  if (error || !data) {
+    console.error('[db] Motor query failed:', error?.message)
+    return []
   }
 
   return (data as DbRow[]).map(rowToUnit)
@@ -164,6 +166,7 @@ export async function getUnitBySlug(slug: string): Promise<InventoryUnit | null>
     .from('units')
     .select('*, media(url, sort_order)')
     .eq('slug', slug)
+    .eq('status', 'active')
     .single()
 
   if (error || !data) return null

@@ -20,6 +20,8 @@ export interface DmsExportOp {
   model?: string
   price?: number
   stock_number?: string
+  description?: string
+  photo_url?: string
   // UPDATE_PRICE
   new_price?: number
 }

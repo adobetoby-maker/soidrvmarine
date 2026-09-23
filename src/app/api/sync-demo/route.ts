@@ -1,36 +1,51 @@
 // Built by ATLAS — 2026-09-22
-// POST /api/sync-demo — runs the REAL propagation engine (src/lib/sync-engine.ts):
-// ingests the mock DeskManager export, diffs it against the live `units` table,
-// and dispatches every eligible channel adapter. This writes real rows to
-// units / channel_listings / sync_jobs. It is no longer a dry run.
-//
-// Body: { simulateConnected?: boolean } — when true, channels without real
-// credentials are treated as connected for this run only, clearly tagged
-// SIMULATED in the response and in channel_listings.last_error/reason.
+// Authenticated, single-unit demo. These actions write to the configured DB.
+// External channel adapters are not connected; their statuses stay pending.
+import { timingSafeEqual } from 'node:crypto'
+import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { runSync } from '@/lib/sync-engine'
+import { buildUsedBoatDemoOperation, type UsedBoatDemoStage } from '@/lib/demo-used-boat'
 
-export async function POST(req: NextRequest) {
-  let simulateConnected = false
-  try {
-    const body = await req.json()
-    simulateConnected = !!body?.simulateConnected
-  } catch {
-    // no body — default run
-  }
-
-  try {
-    const result = await runSync({ simulateConnected })
-    return NextResponse.json(result)
-  } catch (err) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : 'sync failed' }, { status: 500 })
-  }
+function authorized(req: NextRequest): boolean {
+  const expected = process.env.DEMO_SYNC_TOKEN
+  const provided = req.headers.get('x-demo-sync-token')
+  if (!expected || !provided) return false
+  const a = Buffer.from(expected)
+  const b = Buffer.from(provided)
+  return a.length === b.length && timingSafeEqual(a, b)
 }
 
-// GET kept for manual/browser testing — same real engine, no simulate flag.
-export async function GET() {
+export async function POST(req: NextRequest) {
+  if (!process.env.DEMO_SYNC_TOKEN) {
+    return NextResponse.json({ error: 'Demo sync is disabled until DEMO_SYNC_TOKEN is configured' }, { status: 503 })
+  }
+  if (!authorized(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  let stage: UsedBoatDemoStage | undefined
   try {
-    const result = await runSync({})
+    const body = await req.json()
+    if (body?.stage === 'list-used-boat' || body?.stage === 'sell-used-boat') stage = body.stage
+  } catch {
+    // Invalid JSON is rejected below.
+  }
+  if (!stage) {
+    return NextResponse.json({ error: 'Choose list-used-boat or sell-used-boat' }, { status: 400 })
+  }
+
+  try {
+    const result = await runSync({ operations: [buildUsedBoatDemoOperation(stage)] })
+    const siteOutcome = result.channelRuns.find(run => run.channel_id === 'site')?.outcome
+    const expectedOutcome = stage === 'sell-used-boat' ? 'removed' : 'live'
+    if (siteOutcome !== expectedOutcome) {
+      return NextResponse.json({ error: 'Demo unit did not reach the requested state', result }, { status: 409 })
+    }
+    revalidatePath('/boats')
+    revalidatePath('/inventory/[slug]', 'page')
+    revalidatePath('/admin')
+    revalidatePath('/')
     return NextResponse.json(result)
   } catch (err) {
     return NextResponse.json({ error: err instanceof Error ? err.message : 'sync failed' }, { status: 500 })

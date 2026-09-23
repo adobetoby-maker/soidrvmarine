@@ -50,7 +50,7 @@ files) is now derived from pointer #1, so those files never need editing.
 
 ### 5. Infrastructure
 - [ ] New Supabase project (single-tenant DB per dealer keeps blast-radius clean — see BLAST-RADIUS below)
-- [ ] `.env.local`: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`
+- [ ] `.env.local`: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `RESEND_API_KEY`, `DEMO_SYNC_TOKEN` (only if the manager demo is enabled)
 - [ ] New Coolify app → `<dealer-slug>.worker-bee.app` via the cloudflared tunnel (same recipe as soidrvmarine)
 - [ ] DNS CNAME → the shared tunnel target
 
