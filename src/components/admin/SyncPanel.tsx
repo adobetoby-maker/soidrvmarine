@@ -49,6 +49,16 @@ const STATUS_COLOR: Record<ListingStatus, string> = {
   removed: '#334155',
 }
 
+const HONESTY_COLOR: Record<string, string> = {
+  REAL: '#22c55e',
+  'BEST-EFFORT': '#f59e0b',
+  UNKNOWN: '#ef4444',
+}
+
+const FILE_CHANNELS: ChannelId[] = ['rv_trader', 'boats_group', 'rv_universe', 'meta', 'google_vl', 'craigslist']
+
+type ArtifactInfo = { honesty: string; sourceNote: string; unitCount: number; filename: string }
+
 const card: React.CSSProperties = {
   background: '#1a1f2e',
   border: '1px solid #2d3748',
@@ -72,6 +82,7 @@ export function SyncPanel() {
   const [demoToken, setDemoToken] = useState('')
   const [lastRun, setLastRun] = useState<SyncResult | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [artifacts, setArtifacts] = useState<Partial<Record<ChannelId, ArtifactInfo>>>({})
 
   const fetchStatus = useCallback(async () => {
     try {
@@ -88,6 +99,29 @@ export function SyncPanel() {
   useEffect(() => {
     fetchStatus()
   }, [fetchStatus])
+
+  useEffect(() => {
+    let cancelled = false
+    Promise.all(
+      FILE_CHANNELS.map(async ch => {
+        try {
+          const res = await fetch(`/api/channel-feed/${ch}?info=1`)
+          const data = await res.json()
+          return [ch, data] as const
+        } catch {
+          return null
+        }
+      })
+    ).then(results => {
+      if (cancelled) return
+      const next: Partial<Record<ChannelId, ArtifactInfo>> = {}
+      for (const r of results) {
+        if (r) next[r[0]] = r[1]
+      }
+      setArtifacts(next)
+    })
+    return () => { cancelled = true }
+  }, [status])
 
   const runSync = async (stage: 'list-used-boat' | 'sell-used-boat') => {
     setLoading(true)
@@ -254,6 +288,30 @@ export function SyncPanel() {
                         {counts[s]} {s.replace('_', ' ')}
                       </span>
                     ))}
+                  </div>
+                )}
+
+                {artifacts[ch] && (
+                  <div style={{ marginTop: '0.625rem', paddingTop: '0.625rem', borderTop: '1px solid #1e293b' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.3rem' }}>
+                      <span style={{
+                        fontSize: '0.5rem', fontWeight: 700, letterSpacing: '0.05em',
+                        color: HONESTY_COLOR[artifacts[ch]!.honesty], background: `${HONESTY_COLOR[artifacts[ch]!.honesty]}18`,
+                        padding: '0.15rem 0.35rem', borderRadius: '3px',
+                      }}>
+                        {artifacts[ch]!.honesty}
+                      </span>
+                      <span style={{ fontSize: '0.6875rem', color: '#64748b' }}>{artifacts[ch]!.unitCount} unit(s) in feed</span>
+                    </div>
+                    <p style={{ fontSize: '0.6875rem', color: '#475569', lineHeight: 1.4, margin: '0 0 0.4rem' }}>{artifacts[ch]!.sourceNote}</p>
+                    <a
+                      href={`/api/channel-feed/${ch}?download=1`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontSize: '0.75rem', color: '#60a5fa', textDecoration: 'none' }}
+                    >
+                      View generated {artifacts[ch]!.filename} →
+                    </a>
                   </div>
                 )}
               </div>
