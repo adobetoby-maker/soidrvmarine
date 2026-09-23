@@ -5,7 +5,7 @@ import { timingSafeEqual } from 'node:crypto'
 import { revalidatePath } from 'next/cache'
 import { NextRequest, NextResponse } from 'next/server'
 import { runSync } from '@/lib/sync-engine'
-import { buildUsedBoatDemoOperation, type UsedBoatDemoStage } from '@/lib/demo-used-boat'
+import { buildUsedBoatDemoOperation, DEMO_USED_BOAT_SLUG, type UsedBoatDemoStage } from '@/lib/demo-used-boat'
 
 function authorized(req: NextRequest): boolean {
   const expected = process.env.DEMO_SYNC_TOKEN
@@ -44,6 +44,7 @@ export async function POST(req: NextRequest) {
     }
     revalidatePath('/boats')
     revalidatePath('/inventory/[slug]', 'page')
+    revalidatePath(`/inventory/${DEMO_USED_BOAT_SLUG}`) // exact-path purge -- the pattern alone left a stale cached copy live
     revalidatePath('/admin')
     revalidatePath('/')
     return NextResponse.json(result)
