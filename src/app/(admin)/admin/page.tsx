@@ -2,8 +2,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { RV_INVENTORY, BOAT_INVENTORY } from '@/lib/inventory'
-import type { ChannelId } from '@/lib/types'
 import { SocialAutopilot } from '@/components/admin/SocialAutopilot'
+import { SyncPanel } from '@/components/admin/SyncPanel'
 
 export const metadata: Metadata = {
   title: 'Admin — Southern Idaho RV & Marine',
@@ -14,39 +14,6 @@ export const revalidate = 60
 const ALL  = [...RV_INVENTORY, ...BOAT_INVENTORY]
 const rvs  = RV_INVENTORY.length
 const boats = BOAT_INVENTORY.length
-
-const CHANNELS: { id: ChannelId; label: string; note: string }[] = [
-  { id: 'site',        label: 'This Website',       note: 'Live now' },
-  { id: 'rv_trader',   label: 'RV Trader',           note: 'Apply for access →' },
-  { id: 'rv_universe', label: 'RV Universe',         note: 'Free — enable when ready' },
-  { id: 'boats_group', label: 'Boats Group',         note: 'Apply for access →' },
-  { id: 'meta',        label: 'Facebook/Instagram',  note: 'Configure catalog feed' },
-  { id: 'google_vl',   label: 'Google Vehicle Ads',  note: 'Wire feed URL' },
-  { id: 'craigslist',  label: 'Craigslist',          note: 'Apply for BAPI access' },
-]
-
-const SITE_STATUS: Record<ChannelId, 'live' | 'ready' | 'pending' | 'off'> = {
-  site:        'live',
-  rv_trader:   'pending',
-  rv_universe: 'ready',
-  boats_group: 'pending',
-  meta:        'ready',
-  google_vl:   'ready',
-  craigslist:  'pending',
-}
-
-const statusColor: Record<string, string> = {
-  live:    '#22c55e',
-  ready:   '#3b82f6',
-  pending: '#f59e0b',
-  off:     '#334155',
-}
-const statusLabel: Record<string, string> = {
-  live:    'LIVE',
-  ready:   'READY',
-  pending: 'APPLY',
-  off:     'OFF',
-}
 
 const card: React.CSSProperties = {
   background: '#1a1f2e',
@@ -173,36 +140,10 @@ export default function AdminPage() {
           </p>
         </div>
 
-        {/* Demo sync CTA */}
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          <a
-            href="/api/sync-demo"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-              background: '#3b82f6', color: 'white', fontWeight: 600,
-              fontSize: '0.875rem', padding: '0.5rem 1rem', borderRadius: '6px',
-              textDecoration: 'none',
-            }}
-          >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/>
-              <path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
-              <path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/>
-              <path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/>
-              <path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/>
-              <path d="M15.5 9H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5S16.33 9 15.5 9z"/>
-              <path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/>
-              <path d="M8.5 15H10v-1.5c0-.83-.67-1.5-1.5-1.5S7 12.67 7 13.5 7.67 15 8.5 15z"/>
-            </svg>
-            Run Demo Sync
-          </a>
-          <p style={{ fontSize: '0.75rem', color: '#475569', margin: 0 }}>
-            Simulates a DeskManager export: 1 new unit, 1 price change, 1 sold unit
-          </p>
-        </div>
       </div>
+
+      {/* ── Real sync engine + status board (src/components/admin/SyncPanel.tsx) ── */}
+      <SyncPanel />
 
       {/* ── Inventory summary ───────────────────────────────────────────────── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
@@ -270,38 +211,6 @@ export default function AdminPage() {
               ))}
             </tbody>
           </table>
-        </div>
-      </div>
-
-      {/* ── Channel distribution ────────────────────────────────────────────── */}
-      <div style={{ ...card, marginBottom: '2rem' }}>
-        <p style={label12}>Distribution Channels</p>
-        <p style={{ fontSize: '0.8125rem', color: '#475569', marginBottom: '1rem', lineHeight: 1.5 }}>
-          Once the sync is running, one database push broadcasts to all active channels automatically.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '0.625rem' }}>
-          {CHANNELS.map(ch => {
-            const s = SITE_STATUS[ch.id]
-            return (
-              <div key={ch.id} style={{
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                background: '#111827', border: '1px solid #1e293b', borderRadius: '6px',
-                padding: '0.625rem 0.875rem',
-              }}>
-                <div>
-                  <p style={{ fontSize: '0.875rem', fontWeight: 500, color: s === 'live' ? '#f1f5f9' : '#475569', margin: '0 0 0.125rem' }}>{ch.label}</p>
-                  <p style={{ fontSize: '0.6875rem', color: '#334155', margin: 0 }}>{ch.note}</p>
-                </div>
-                <span style={{
-                  fontSize: '0.5625rem', fontWeight: 700, letterSpacing: '0.08em',
-                  color: statusColor[s], background: `${statusColor[s]}18`,
-                  padding: '0.25rem 0.5rem', borderRadius: '4px',
-                }}>
-                  {statusLabel[s]}
-                </span>
-              </div>
-            )
-          })}
         </div>
       </div>
 
