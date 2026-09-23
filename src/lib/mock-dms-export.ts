@@ -75,5 +75,21 @@ export function buildMockDmsExport(): DmsExportOp[] {
       price: 24990,
       stock_number: 'DEMO-KEY-001',
     },
+    {
+      // Proves used inventory runs through the identical path as new —
+      // `condition` is stored but never checked by any eligibility gate.
+      dms_id: 'DEMO-USED-RV-001',
+      operation: 'ADD',
+      unit_type: 'rv',
+      identifier_type: 'vin',
+      identifier: '4X4TDMPU9NG012345',
+      category: 'fifth-wheel',
+      condition: 'used',
+      year: 2021,
+      make: 'Keystone',
+      model: 'Montana 3121RL',
+      price: 38900,
+      stock_number: 'DEMO-USED-RV-001',
+    },
   ]
 }
