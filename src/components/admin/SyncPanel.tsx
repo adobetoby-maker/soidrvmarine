@@ -167,10 +167,19 @@ export function SyncPanel() {
               Last run — {new Date(lastRun.completedAt).toLocaleTimeString()}
               {lastRun.simulateConnected ? ' (simulate-connected mode)' : ''}
             </p>
-            <div style={{ display: 'grid', gap: '0.25rem', fontSize: '0.75rem', color: '#cbd5e1', marginBottom: '0.75rem' }}>
-              {lastRun.ingest.added.map((a, i) => <div key={`a${i}`}>+ {a.summary}</div>)}
-              {lastRun.ingest.updated.map((u, i) => <div key={`u${i}`}>~ {u.summary}</div>)}
-              {lastRun.ingest.sold.map((s, i) => <div key={`s${i}`}>- {s.summary}</div>)}
+            <div style={{
+              display: 'grid', gap: '0.375rem', fontSize: '0.75rem', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+              background: '#0b1120', border: '1px solid #1e293b', borderRadius: '6px', padding: '0.75rem 0.875rem', marginBottom: '1rem',
+            }}>
+              {lastRun.ingest.added.map((a, i) => (
+                <div key={`a${i}`}><span style={{ color: '#4ade80', fontWeight: 700 }}>+</span> <span style={{ color: '#cbd5e1' }}>{a.summary}</span></div>
+              ))}
+              {lastRun.ingest.updated.map((u, i) => (
+                <div key={`u${i}`}><span style={{ color: '#facc15', fontWeight: 700 }}>~</span> <span style={{ color: '#cbd5e1' }}>{u.summary}</span></div>
+              ))}
+              {lastRun.ingest.sold.map((s, i) => (
+                <div key={`s${i}`}><span style={{ color: '#f87171', fontWeight: 700 }}>-</span> <span style={{ color: '#cbd5e1' }}>{s.summary}</span></div>
+              ))}
             </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' }}>
