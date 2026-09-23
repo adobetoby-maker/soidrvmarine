@@ -33,7 +33,7 @@ const label12: React.CSSProperties = {
 }
 
 const flowStep: React.CSSProperties = {
-  flex: '1',
+  flex: '1 1 220px',
   background: '#111827',
   border: '1px solid #2d3748',
   borderRadius: '8px',
@@ -83,7 +83,7 @@ export default function AdminPage() {
         </div>
 
         {/* Flow diagram */}
-        <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch', gap: '0.5rem', marginBottom: '1.25rem' }}>
           {/* Step 1: DeskManager */}
           <div style={{ ...flowStep }}>
             <p style={{ ...label12, color: '#94a3b8' }}>Step 1</p>
