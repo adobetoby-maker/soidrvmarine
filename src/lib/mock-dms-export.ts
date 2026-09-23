@@ -31,6 +31,7 @@ export function buildMockDmsExport(): DmsExportOp[] {
   return [
     { dms_id: 'rv006', operation: 'UPDATE_PRICE', new_price: 31450 },
     { dms_id: 'boat001', operation: 'SOLD' },
+    { dms_id: 'DEMO-USED-RV-001', operation: 'SOLD' },
     {
       dms_id: 'DEMO-RV-NEW-001',
       operation: 'ADD',
