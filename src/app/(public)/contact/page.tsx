@@ -21,12 +21,14 @@ const HOURS = [
 ]
 
 interface Props {
-  searchParams: Promise<{ unit?: string }>
+  searchParams: Promise<{ unit?: string; stock?: string }>
 }
 
 export default async function ContactPage({ searchParams }: Props) {
   const params = await searchParams
   const unitRef = params.unit ?? null
+  const stockNumber = params.stock ?? null
+  const inquiryLabel = unitRef ? `${unitRef}${stockNumber ? ` (stock #${stockNumber})` : ''}` : null
 
   return (
     <>
@@ -84,7 +86,7 @@ export default async function ContactPage({ searchParams }: Props) {
             <div style={{ marginBottom: '1.5rem', padding: '1rem 1.25rem', background: 'oklch(97% 0.015 80)', border: '1.5px solid var(--color-amber)', borderRadius: 10, display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-amber)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: 2 }} aria-hidden><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
               <p style={{ fontSize: '0.875rem', color: 'var(--color-navy)', lineHeight: 1.5 }}>
-                <strong>Inquiring about unit #{unitRef}</strong> — mention this stock number when you reach us and we'll pull it up right away.
+                <strong>Inquiring about {unitRef}</strong>{stockNumber ? ` — stock #${stockNumber}` : ''}. We can pull up this listing when you call.
               </p>
             </div>
           )}
@@ -152,7 +154,7 @@ export default async function ContactPage({ searchParams }: Props) {
             Prefer a call? Dial <a href={DEALER_INFO.phoneHref} style={{ color: 'var(--color-amber)', fontWeight: 600, textDecoration: 'none' }}>{DEALER_INFO.phone}</a> — we answer during business hours.
           </p>
 
-          <ContactForm unitRef={unitRef} />
+              <ContactForm unitRef={inquiryLabel} />
         </div>
       </div>
 

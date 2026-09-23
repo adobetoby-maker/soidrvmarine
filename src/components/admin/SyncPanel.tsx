@@ -4,6 +4,7 @@
 // object — every badge on this page reflects an actual channel_listings row.
 
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import type { ChannelId, ListingStatus } from '@/lib/types'
 
 type Listing = {
@@ -25,7 +26,6 @@ type ChannelRun = { dms_id: string; unit_type: string; channel_id: ChannelId; ou
 type SyncResult = {
   startedAt: string
   completedAt: string
-  simulateConnected: boolean
   ingest: { added: { dms_id: string; summary: string }[]; updated: { dms_id: string; summary: string }[]; sold: { dms_id: string; summary: string }[] }
   channelRuns: ChannelRun[]
 }
@@ -66,9 +66,10 @@ const label12: React.CSSProperties = {
 }
 
 export function SyncPanel() {
+  const router = useRouter()
   const [status, setStatus] = useState<SyncStatus | null>(null)
   const [loading, setLoading] = useState(false)
-  const [simulateConnected, setSimulateConnected] = useState(false)
+  const [demoToken, setDemoToken] = useState('')
   const [lastRun, setLastRun] = useState<SyncResult | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -88,19 +89,20 @@ export function SyncPanel() {
     fetchStatus()
   }, [fetchStatus])
 
-  const runSync = async () => {
+  const runSync = async (stage: 'list-used-boat' | 'sell-used-boat') => {
     setLoading(true)
     setError(null)
     try {
       const res = await fetch('/api/sync-demo', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ simulateConnected }),
+        headers: { 'Content-Type': 'application/json', 'x-demo-sync-token': demoToken },
+        body: JSON.stringify({ stage }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error ?? 'sync failed')
       setLastRun(data)
       await fetchStatus()
+      router.refresh()
     } catch (e) {
       setError(e instanceof Error ? e.message : 'sync failed')
     } finally {
@@ -128,14 +130,23 @@ export function SyncPanel() {
           <div>
             <p style={{ ...label12, marginBottom: 0, color: '#60a5fa' }}>The Propagation Engine</p>
             <h2 style={{ fontSize: '1rem', fontWeight: 600, color: '#f1f5f9', margin: 0 }}>
-              Simulates a DeskManager export, writes real rows to the database, dispatches every eligible channel
+              Test a fictional used boat from listing through sale and channel removal
             </h2>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <input
+            type="password"
+            aria-label="Demo sync token"
+            placeholder="Demo sync token"
+            value={demoToken}
+            onChange={e => setDemoToken(e.target.value)}
+            autoComplete="off"
+            style={{ padding: '0.5rem 0.75rem', borderRadius: '6px', border: '1px solid #334155', background: '#0f172a', color: 'white' }}
+          />
           <button
-            onClick={runSync}
+            onClick={() => runSync('list-used-boat')}
             disabled={loading}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
@@ -144,18 +155,21 @@ export function SyncPanel() {
               border: 'none', cursor: loading ? 'default' : 'pointer',
             }}
           >
-            {loading ? 'Running sync…' : 'Run Demo Sync'}
+            {loading ? 'Running sync…' : 'List Demo Used Boat'}
+          </button>
+          <button
+            onClick={() => runSync('sell-used-boat')}
+            disabled={loading}
+            style={{ background: '#991b1b', color: 'white', fontWeight: 600, fontSize: '0.875rem', padding: '0.5rem 1rem', borderRadius: '6px', border: 'none', cursor: loading ? 'default' : 'pointer' }}
+          >
+            Mark Demo Boat Sold
           </button>
 
-          <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem', color: '#94a3b8', cursor: 'pointer' }}>
-            <input
-              type="checkbox"
-              checked={simulateConnected}
-              onChange={e => setSimulateConnected(e.target.checked)}
-            />
-            Preview: treat unconnected channels as live (clearly tagged SIMULATED)
-          </label>
         </div>
+
+        <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.75rem' }}>
+          Demo Marine River 18 TEST UNIT · used fishing boat · HIN DMO00001A121 · stock DEMO-USED-BOAT-001. List first, inspect the public page, then mark sold.
+        </p>
 
         {error && (
           <p style={{ color: '#f87171', fontSize: '0.8125rem', marginTop: '0.75rem' }}>Error: {error}</p>
@@ -165,7 +179,6 @@ export function SyncPanel() {
           <div style={{ marginTop: '1.25rem', background: '#111827', border: '1px solid #1e293b', borderRadius: '8px', padding: '1rem' }}>
             <p style={{ ...label12, color: '#94a3b8' }}>
               Last run — {new Date(lastRun.completedAt).toLocaleTimeString()}
-              {lastRun.simulateConnected ? ' (simulate-connected mode)' : ''}
             </p>
             <div style={{
               display: 'grid', gap: '0.375rem', fontSize: '0.75rem', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -218,7 +231,7 @@ export function SyncPanel() {
           {channels.map(ch => {
             const counts = rollup.get(ch)!
             const total = Object.values(counts).reduce((a, b) => a + b, 0)
-            const connected = enabledSet.has(ch)
+            const connected = ch === 'site' || enabledSet.has(ch)
             return (
               <div key={ch} style={{ background: '#111827', border: '1px solid #1e293b', borderRadius: '6px', padding: '0.75rem 0.875rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: total ? '0.5rem' : 0 }}>

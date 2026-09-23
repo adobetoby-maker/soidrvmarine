@@ -71,8 +71,8 @@ export function ContactForm({ unitRef }: { unitRef: string | null }) {
 
       <div>
         <label htmlFor="contact-subject" style={labelStyle}>I'm interested in…</label>
-        <select id="contact-subject" name="subject" defaultValue={unitRef ? `Unit #${unitRef}` : 'General'} style={{ ...inputStyle, appearance: 'none' }}>
-          {unitRef ? <option value={`Unit #${unitRef}`}>{`Unit #${unitRef} — specific unit inquiry`}</option> : null}
+        <select id="contact-subject" name="subject" defaultValue={unitRef ? `Unit inquiry: ${unitRef}` : 'General'} style={{ ...inputStyle, appearance: 'none' }}>
+          {unitRef ? <option value={`Unit inquiry: ${unitRef}`}>{`Unit inquiry: ${unitRef}`}</option> : null}
           <option value="RV">A specific RV</option>
           <option value="Boat">A specific boat</option>
           <option value="Mercury">Mercury outboard motors</option>
@@ -88,7 +88,7 @@ export function ContactForm({ unitRef }: { unitRef: string | null }) {
         <textarea
           id="contact-message" name="message" rows={4}
           style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.55 }}
-          placeholder={unitRef ? `I'd like to know more about unit #${unitRef}…` : 'How can we help you?'}
+          placeholder={unitRef ? `I'd like to know more about ${unitRef}…` : 'How can we help you?'}
         />
       </div>
 

@@ -1,7 +1,7 @@
 // Built by ATLAS — 2026-07-05
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { RV_INVENTORY, BOAT_INVENTORY } from '@/lib/inventory'
+import { getRvInventory, getBoatInventory } from '@/lib/db'
 import { SocialAutopilot } from '@/components/admin/SocialAutopilot'
 import { SyncPanel } from '@/components/admin/SyncPanel'
 
@@ -10,10 +10,6 @@ export const metadata: Metadata = {
   robots: 'noindex',
 }
 export const revalidate = 60
-
-const ALL  = [...RV_INVENTORY, ...BOAT_INVENTORY]
-const rvs  = RV_INVENTORY.length
-const boats = BOAT_INVENTORY.length
 
 const card: React.CSSProperties = {
   background: '#1a1f2e',
@@ -41,7 +37,11 @@ const flowStep: React.CSSProperties = {
   minWidth: 0,
 }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const [rvInventory, boatInventory] = await Promise.all([getRvInventory(), getBoatInventory()])
+  const ALL = [...rvInventory, ...boatInventory]
+  const rvs = rvInventory.length
+  const boats = boatInventory.length
   const newCount  = ALL.filter(u => u.condition === 'New').length
   const usedCount = ALL.filter(u => u.condition === 'Used').length
 

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 420" role="img" aria-label="Demo boat listing, no product photo">
+  <rect width="600" height="420" fill="#102b3b"/>
+  <path d="M0 278c61-15 114-15 176 0s117 15 176 0 124-15 248 0v142H0z" fill="#1d6178"/>
+  <path d="M130 238h340l-42 65H174z" fill="#e8b76a"/>
+  <path d="M290 135v103M290 143l103 80H290" fill="none" stroke="#f4ead5" stroke-width="8" stroke-linejoin="round"/>
+  <text x="300" y="70" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="26" font-weight="700">DEMO USED BOAT</text>
+  <text x="300" y="360" text-anchor="middle" fill="#ffffff" font-family="system-ui,sans-serif" font-size="19">TEST LISTING · NOT FOR SALE</text>
+</svg>
